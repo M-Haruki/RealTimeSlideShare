@@ -1,0 +1,41 @@
+db: ER diagram {
+  presentations: {
+    shape: sql_table
+    presentation_id: varchar(16) {constraint: primary_key}
+    title: varchar(32)
+    total_page: tinyint
+    current_page: tinyint
+    register_date: bigint
+  }
+  sessions: {
+    shape: sql_table
+    session_id: varchar(32) {constraint: primary_key}
+    presentation_id: varchar(16)
+  }
+  slides: {
+    shape: sql_table
+    uuid: varchar(16) {constraint: primary_key}
+    presentation_id: varchar(16)
+    page: tinyint
+    pdf_data: blod(16MB)
+  }
+  sessions.presentation_id <- presentations.presentation_id
+  presentations.presentation_id -> slides.presentation_id
+  presentations.current_page -> slides.page
+}
+
+Server: {
+  Cliant
+  Ubuntu: {
+    Apache: {
+      ReverceProxy
+      HTML
+    }
+    Gunicorn: Gunicorn(Demon) {
+      UvicornWorkerProcess
+    }
+  }
+  Cliant -> Ubuntu.Apache.ReverceProxy: Port443
+  Cliant -> Ubuntu.Apache.HTML: Port443
+  Ubuntu.Apache.ReverceProxy -> Ubuntu.Gunicorn.UvicornWorkerProcess: Port8001
+}
