@@ -9,7 +9,8 @@ db: ER diagram {
   }
   sessions: {
     shape: sql_table
-    session_id: varchar(32) {constraint: primary_key}
+    uuid: varchar(16) {constraint: primary_key}
+    session_id: varchar(32)
     presentation_id: varchar(16)
   }
   slides: {

@@ -3,15 +3,13 @@
 このファイルを単体で実行すると、テーブルの作成を行う
 """
 
-import os
-
 # DBエンジンの作成
 DBInfo = {
-    "UserName": "kinensai78_sys78",
-    "UserPs": "vyXUqF34KR",
+    "UserName": "real_time_slide_share",
+    "UserPs": "]te(IvE08/plwDl.",
     "Host": "localhost",
     "Port": 3306,
-    "DBName": os.environ.get("DB_NAME"),
+    "DBName": "real_time_slide_share",
 }
 
 from sqlalchemy import create_engine
@@ -46,14 +44,15 @@ class Presentations(Base):
 class Sessions(Base):
     __tablename__ = "sessions"
     __table_args__ = {"comment": "コントロールのセッション情報を管理するテーブル"}
-    session_id = Column(String(32), primary_key=True, comment="セッションID")
+    uuid = Column(String(16), primary_key=True, comment="UUID")
+    session_id = Column(String(32), nullable=False, comment="セッションID")
     presentation_id = Column(String(16), nullable=False, comment="プレゼンテーションID")
 
 
 class Slides(Base):
     __tablename__ = "slides"
     __table_args__ = {"comment": "スライドのPDFデータを管理するテーブル"}
-    uuid = Column(String(16), primary_key=True, comment="スライドのUUID")
+    uuid = Column(String(16), primary_key=True, comment="UUID")
     presentation_id = Column(String(16), nullable=False, comment="プレゼンテーションID")
     page = Column(SmallInteger, nullable=False, comment="ページ")
     pdf_data = Column(
