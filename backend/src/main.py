@@ -2,9 +2,19 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, Response, Cookie
 from typing import Union
 import pypdf, io, time, uuid
 import db
-
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# CORS設定
+# 本番環境では適切な設定を行う
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/{presentation_id}/info")
@@ -83,7 +93,7 @@ def get_slide(presentation_id: str):
 async def upload_slide(
     title: str,
     response: Response,
-    ufile: UploadFile = File(),
+    ufile: UploadFile,
     session_id: Union[str, None] = Cookie(None),
 ):
     """制限
