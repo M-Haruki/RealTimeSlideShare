@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Response, Cookie
+from typing import Union
 import pypdf, io, time, uuid
 import db
 
@@ -28,8 +29,11 @@ def presentation_info(presentation_id: str):
 
 
 @app.post("/{presentation_id}/go")
-# 要アクセス制限
-def go_to_page(presentation_id: str, num: int):
+def go_to_page(
+    presentation_id: str, num: int, session_id: Union[str, None] = Cookie(None)
+):
+    if not check_session(session_id, presentation_id):
+        raise HTTPException(status_code=400, detail="Invalid session")
     with db.db_Session() as session:
         presentation = (
             session.query(db.Presentations.total_page, db.Presentations.current_page)
@@ -52,15 +56,40 @@ def go_to_page(presentation_id: str, num: int):
         return "OK"
 
 
-# @app.get("/{presentation_id}/slide")
+@app.get("/{presentation_id}/slide")
+def get_slide(presentation_id: str):
+    with db.db_Session() as session:
+        presentation = (
+            session.query(
+                db.Presentations.current_page,
+            )
+            .filter_by(presentation_id=presentation_id)
+            .first()
+        )
+        if presentation is None:
+            raise HTTPException(status_code=404, detail="Presentation not found")
+        current_page = presentation[0]
+        slide = (
+            session.query(db.Slides.pdf_data)
+            .filter_by(presentation_id=presentation_id, page=current_page)
+            .all()
+        )
+        if slide is None:
+            raise HTTPException(status_code=404, detail="Slide not found")
+        return Response(content=slide[0][0], media_type="application/pdf")
 
 
 @app.post("/create")
-# 要アップロード制限
-async def upload_slide(title: str, ufile: UploadFile = File()):
+async def upload_slide(
+    title: str,
+    response: Response,
+    ufile: UploadFile = File(),
+    session_id: Union[str, None] = Cookie(None),
+):
     """制限
     - 50MB以上のファイルは受け付けない(size)
     - PDF以外のファイルは受け付けない(content_type)
+    - タイトルが32文字以上の場合は受け付けない(title_length)
     - 50ページ以上のファイルは受け付けない(page_num)
     - 1ページのPDFデータが1MB以上の場合は受け付けない(page_size)
     - PDF処理のエラー(pdf_error)
@@ -69,6 +98,8 @@ async def upload_slide(title: str, ufile: UploadFile = File()):
         raise HTTPException(status_code=400, detail={"reason": "size"})
     if ufile.content_type != "application/pdf":  # PDF以外のファイルは受け付けない
         raise HTTPException(status_code=400, detail={"reason": "content_type"})
+    if len(title) > 32:  # タイトルが32文字以上の場合は受け付けない
+        raise HTTPException(status_code=400, detail={"reason": "title_length"})
     presentation_id = uuid_gen()  # プレゼンテーションIDを生成
     one_pdf_binarys = []
     try:  # PDF処理のエラーハンドリング
@@ -95,9 +126,14 @@ async def upload_slide(title: str, ufile: UploadFile = File()):
             raise HTTPException(status_code=400, detail={"reason": "page_size"})
         else:
             raise HTTPException(status_code=400, detail={"reason": "pdf_error"})
-    # プレゼンテーション情報をDBに登録
+    # セッション処理
+    # セッションIDがない場合は新規作成し、ある場合はそのまま使用
+    if session_id is None:
+        session_id = session_id_gen()
+    # DBに登録
     try:
         with db.db_Session() as session:
+            # プレゼンテーション情報
             presentation = db.Presentations(
                 presentation_id=presentation_id,
                 title=title,
@@ -106,7 +142,7 @@ async def upload_slide(title: str, ufile: UploadFile = File()):
                 register_date=int(time.time()),
             )
             session.add(presentation)
-            # PDFをDBに登録
+            # PDFデータ
             for i in range(total_page):
                 slide = db.Slides(
                     pdf_data=one_pdf_binarys[i],
@@ -115,11 +151,62 @@ async def upload_slide(title: str, ufile: UploadFile = File()):
                     uuid=uuid_gen(),
                 )
                 session.add(slide)
+            # セッション
+            session_data = db.Sessions(
+                uuid=uuid_gen(),
+                session_id=session_id,
+                presentation_id=presentation_id,
+            )
+            session.add(session_data)
             session.commit()
     except Exception as e:
         raise HTTPException(status_code=400, detail={"reason": "db_error"})
+    response.set_cookie("session_id", session_id, max_age=60 * 60 * 24 * 7)  # 1週間有効
     return {"presentation_id": presentation_id}
+
+
+@app.delete("/{presentation_id}/delete")
+def delete_presentation(
+    presentation_id: str,
+    session_id: Union[str, None] = Cookie(None),
+):
+    if not check_session(session_id, presentation_id):
+        raise HTTPException(status_code=400, detail="Invalid session")
+    with db.db_Session() as session:
+        presentation = (
+            session.query(db.Presentations)
+            .filter_by(presentation_id=presentation_id)
+            .first()
+        )
+        if presentation is None:
+            raise HTTPException(status_code=404, detail="Presentation not found")
+        session.query(db.Slides).filter_by(presentation_id=presentation_id).delete()
+        session.query(db.Sessions).filter_by(presentation_id=presentation_id).delete()
+        session.query(db.Presentations).filter_by(
+            presentation_id=presentation_id
+        ).delete()
+        session.commit()
+    # 複数のスライドを持っている可能性のため、クッキーは削除しない
+    return "OK"
 
 
 def uuid_gen():
     return str(uuid.uuid4()).replace("-", "")[:16]
+
+
+def session_id_gen():
+    return str(uuid.uuid4()).replace("-", "")[:32]
+
+
+def check_session(session_id: str, presentation_id: str):
+    if session_id is None or presentation_id is None:
+        return False
+    with db.db_Session() as session:
+        session_data = (
+            session.query(db.Sessions)
+            .filter_by(session_id=session_id, presentation_id=presentation_id)
+            .first()
+        )
+        if session_data is None:
+            return False
+        return True
