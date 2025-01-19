@@ -55,7 +55,6 @@ def go_to_page(
         total_page = presentation[0]
         current_page = presentation[1]
         go_page = current_page + num
-        print(go_page)
         if go_page < 0 or go_page >= total_page:
             raise HTTPException(status_code=400, detail="Invalid page number")
         else:
@@ -63,7 +62,7 @@ def go_to_page(
                 presentation_id=presentation_id
             ).update({"current_page": go_page})
         session.commit()
-        return "OK"
+        return {"current_page": go_page}
 
 
 @app.get("/{presentation_id}/slide")
