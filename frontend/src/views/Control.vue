@@ -1,6 +1,6 @@
 <template>
     <h1>Control</h1>
-    <embed :src="String(slide.path.value)" type="application/pdf" width="100%" height="1000px" />
+    <canvas id="pdf-canvas"></canvas>
     <div>
         <button @click="go(1)">Next</button>
         <button @click="go(-1)">Back</button>
@@ -9,12 +9,10 @@
     <p>page:{{ slide.current_page.value + 1 }}/{{ slide.total_page }}</p>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Slide from '@/components/SlideView.ts';
 import router from '@/router';
 import { useRoute } from 'vue-router';
-
-
 
 const route = useRoute();
 
@@ -33,4 +31,8 @@ function end() {
         );
     }
 }
+
+watch(() => slide.path.value, () => {
+    slide.renderPdf(slide.path.value, "pdf-canvas");
+}, { immediate: true });
 </script>
