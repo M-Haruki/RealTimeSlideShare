@@ -38,6 +38,22 @@ def presentation_info(presentation_id: str):
         }
 
 
+# 軽量化のため、ページ数のみ取得するエンドポイントを追加
+@app.get("/{presentation_id}/current_page")
+def get_page(presentation_id: str):
+    with db.db_Session() as session:
+        presentation = (
+            session.query(
+                db.Presentations.current_page,
+            )
+            .filter_by(presentation_id=presentation_id)
+            .first()
+        )
+        if presentation is None:
+            raise HTTPException(status_code=404, detail="Presentation not found")
+        return presentation[0]
+
+
 @app.post("/{presentation_id}/go")
 def go_to_page(
     presentation_id: str, num: int, session_id: Union[str, None] = Cookie(None)
