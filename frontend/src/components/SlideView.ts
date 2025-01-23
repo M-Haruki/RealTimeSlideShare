@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue'
 import axios from 'axios'
+import router from '@/router'
 
 class Slide {
   id: string
@@ -11,6 +12,7 @@ class Slide {
   current_page = ref<number>(0)
   title = ref<string>('')
   path = ref<string>('')
+  timeId: number = 0
   constructor(id: string) {
     this.id = id
     this.reloadSlide()
@@ -22,6 +24,9 @@ class Slide {
       },
       { immediate: true, deep: true },
     )
+    router.afterEach(() => {
+      clearTimeout(this.timeId)
+    })
     axios({
       method: 'get',
       url: `http://localhost:8000/${this.id}/info`,
@@ -55,7 +60,7 @@ class Slide {
           this.reloadSlide()
         }
         // axios完了後に再起的に呼び出すことで、通信途中に連続してリクエストを送信することを防ぐ
-        setTimeout(() => this.checkPage(true), 5000)
+        this.timeId = setTimeout(() => this.checkPage(true), 5000)
       })
       .catch((error) => {
         alert('スライド情報の取得に失敗しました\nページをリロードしてください')
