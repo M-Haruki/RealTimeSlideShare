@@ -3,19 +3,17 @@
 このファイルを単体で実行すると、テーブルの作成を行う
 """
 
-# DBエンジンの作成
-DBInfo = {
-    "UserName": "real_time_slide_share",
-    "UserPs": "]te(IvE08/plwDl.",
-    "Host": "localhost",
-    "Port": 3306,
-    "DBName": "real_time_slide_share",
-}
+# 設定ファイルの読み込み
+import yaml
 
+with open("config.yml", "r", encoding="utf-8") as f:
+    config = yaml.safe_load(f)
+
+# DBエンジンの作成
 from sqlalchemy import create_engine
 
 ENGINE = create_engine(
-    f'mysql+pymysql://{DBInfo["UserName"]}:{DBInfo["UserPs"]}@{DBInfo["Host"]}:{DBInfo["Port"]}/{DBInfo["DBName"]}'
+    f'mysql+pymysql://{config["database"]["user_name"]}:{config["database"]["user_password"]}@{config["database"]["host"]}:{config["database"]["port"]}/{config["database"]["db_name"]}'
 )
 
 # テーブルの定義
@@ -31,9 +29,15 @@ class Presentations(Base):
     __tablename__ = "presentations"
     __table_args__ = {"comment": "プレゼンテーションの情報を管理するテーブル"}
     presentation_id = Column(
-        String(16), primary_key=True, comment="プレゼンテーションID"
+        String(config["restriction"]["presentation_id_length"]),
+        primary_key=True,
+        comment="プレゼンテーションID",
     )
-    title = Column(String(32), nullable=False, comment="プレゼンテーションのタイトル")
+    title = Column(
+        String(config["restriction"]["max_title_length"]),
+        nullable=False,
+        comment="プレゼンテーションのタイトル",
+    )
     total_page = Column(
         SmallInteger, nullable=False, comment="プレゼンテーションの総ページ数"
     )
@@ -44,19 +48,41 @@ class Presentations(Base):
 class Sessions(Base):
     __tablename__ = "sessions"
     __table_args__ = {"comment": "コントロールのセッション情報を管理するテーブル"}
-    uuid = Column(String(16), primary_key=True, comment="UUID")
-    session_id = Column(String(32), nullable=False, comment="セッションID")
-    presentation_id = Column(String(16), nullable=False, comment="プレゼンテーションID")
+    uuid = Column(
+        String(config["restriction"]["db_uuid_length"]),
+        primary_key=True,
+        comment="UUID",
+    )
+    session_id = Column(
+        String(config["restriction"]["session_id_length"]),
+        nullable=False,
+        comment="セッションID",
+    )
+    presentation_id = Column(
+        String(config["restriction"]["presentation_id_length"]),
+        nullable=False,
+        comment="プレゼンテーションID",
+    )
 
 
 class Slides(Base):
     __tablename__ = "slides"
     __table_args__ = {"comment": "スライドのPDFデータを管理するテーブル"}
-    uuid = Column(String(16), primary_key=True, comment="UUID")
-    presentation_id = Column(String(16), nullable=False, comment="プレゼンテーションID")
+    uuid = Column(
+        String(config["restriction"]["db_uuid_length"]),
+        primary_key=True,
+        comment="UUID",
+    )
+    presentation_id = Column(
+        String(config["restriction"]["presentation_id_length"]),
+        nullable=False,
+        comment="プレゼンテーションID",
+    )
     page = Column(SmallInteger, nullable=False, comment="ページ")
     pdf_data = Column(
-        LargeBinary(1024 * 1024), nullable=False, comment="PDFデータ"
+        LargeBinary(config["restriction"]["max_single_file_size"]),
+        nullable=False,
+        comment="PDFデータ",
     )  # 1MB上限
 
 
