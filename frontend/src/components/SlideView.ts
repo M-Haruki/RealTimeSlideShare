@@ -60,6 +60,7 @@ class Slide {
           this.reloadSlide()
         }
         // axios完了後に再起的に呼び出すことで、通信途中に連続してリクエストを送信することを防ぐ
+        clearTimeout(this.timeId) //念の為clearTimeout
         this.timeId = setTimeout(() => this.checkPage(true), 5000)
       })
       .catch((error) => {
@@ -73,6 +74,7 @@ class Slide {
       withCredentials: true,
     })
       .then(() => {
+        clearTimeout(this.timeId)
         success()
       })
       .catch(() => {
@@ -126,7 +128,7 @@ function renderPdf(path: string, canvasId: string) {
 
     // 最初のページを取得
     const page = await pdf.getPage(1)
-    const scale = 1.0
+    const scale = 2 // スケールを上げると解像度が上がる
     const viewport = page.getViewport({ scale })
 
     // 高DPIをサポート
