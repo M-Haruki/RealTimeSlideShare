@@ -1,5 +1,6 @@
 <template>
     <h1>Control:{{ slide.title }}</h1>
+    <RouterLink :to="{ name: 'share', params: { id: slide.id } }">Share</RouterLink>
     <canvas id="pdf-canvas"></canvas>
     <div>
         <button v-if="slide.isGo.value.prev" @click="go(-1)">Back</button>
