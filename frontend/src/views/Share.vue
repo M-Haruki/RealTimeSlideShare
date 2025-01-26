@@ -16,7 +16,7 @@ import { onMounted } from 'vue';
 import QRCode from "qrcode";
 
 const route = useRoute();
-const slide = new Slide(String(route.params.id));
+const slide = new Slide(String(route.params.id), false);
 const link = `${location.origin}/${slide.id}/view`;
 
 
