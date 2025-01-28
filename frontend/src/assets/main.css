@@ -7,5 +7,6 @@
 }
 :root {
   --color-primary: #fdff6f;
+  --color-body-primary: #0a0a0a;
   font-family: 'Noto Sans JP', serif;
 }
