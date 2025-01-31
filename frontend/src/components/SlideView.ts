@@ -28,6 +28,7 @@ class Slide {
       { immediate: true, deep: true },
     )
     router.afterEach(() => {
+      // 全ページ遷移時に発火してしまうため、onBeforeRouteLeaveなどの代替を要検討
       clearTimeout(this.timeId)
     })
     axios({
