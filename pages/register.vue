@@ -47,7 +47,7 @@ function createPresentation() {
     }).then((response) => {
         isUploading.value = false;
         alert('プレゼンテーションを作成しました');
-        // router.push(`/${response.data.presentation_id}/control`);
+        navigateTo(`/${response.uuid}/control`);
     }).catch((error) => {
         isUploading.value = false;
         switch (error.data.data.reason) {
