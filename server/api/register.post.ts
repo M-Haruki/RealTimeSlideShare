@@ -1,7 +1,7 @@
 import { PDFDocument } from "pdf-lib";
 
 export default defineEventHandler(async (event) => {
-    const title = getQuery(event)["title"]?.toString;
+    const title = getQuery(event)["title"]?.toString();
     const files = await readMultipartFormData(event);
     if (!files || files.length !== 1 || !title) {
         throw createError({
@@ -65,7 +65,13 @@ export default defineEventHandler(async (event) => {
         });
     }
 
+    // 16字のUUIDを生成
+    const uuid = crypto.randomUUID().replaceAll("-", "").slice(0, 16);
+
+    // PDFを保存する
+
     return {
         message: "OK",
+        uuid: uuid,
     };
 });
