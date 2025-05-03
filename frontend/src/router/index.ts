@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/Control.vue'),
     },
     {
+      path: '/:id/share',
+      name: 'share',
+      component: () => import('@/views/Share.vue'),
+    },
+    {
       path: '/register',
       name: 'register',
       component: () => import('@/views/Register.vue'),

@@ -13,10 +13,13 @@ class Slide {
   title = ref<string>('')
   path = ref<string>('')
   timeId: number = 0
-  constructor(id: string) {
+  constructor(id: string, isRealtime: boolean = true) {
+    // isRealtime: 定期的なページ情報の取得を行うかどうか
     this.id = id
     this.reloadSlide()
-    this.checkPage(true)
+    if (isRealtime) {
+      this.checkPage(true)
+    }
     watch(
       [this.current_page, this.total_page],
       () => {
@@ -25,6 +28,7 @@ class Slide {
       { immediate: true, deep: true },
     )
     router.afterEach(() => {
+      // 全ページ遷移時に発火してしまうため、onBeforeRouteLeaveなどの代替を要検討
       clearTimeout(this.timeId)
     })
     axios({

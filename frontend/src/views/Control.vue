@@ -1,20 +1,26 @@
 <template>
-    <h1>Control:{{ slide.title }}</h1>
-    <canvas id="pdf-canvas"></canvas>
-    <div>
-        <button v-if="slide.isGo.value.prev" @click="go(-1)">Back</button>
-        <button v-else disabled>Back</button>
-        <button v-if="slide.isGo.value.next" @click="go(1)">Next</button>
-        <button v-else disabled>Next</button>
-        <button @click="end()">End</button>
+    <slide-title>
+        [ {{ slide.title }} ] (Control)
+    </slide-title>
+    <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+    <div class="control">
+        <RouterLink :to="{ name: 'share', params: { id: slide.id } }">Share</RouterLink>
+        <p>page:{{ slide.current_page.value + 1 }}/{{ slide.total_page }}</p>
+        <div>
+            <button v-if="slide.isGo.value.prev" @click="go(-1)">Back</button>
+            <button v-else disabled>Back</button>
+            <button v-if="slide.isGo.value.next" @click="go(1)">Next</button>
+            <button v-else disabled>Next</button>
+            <button @click="end()">End</button>
+        </div>
     </div>
-    <p>page:{{ slide.current_page.value + 1 }}/{{ slide.total_page }}</p>
 </template>
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { Slide, renderPdf } from '@/components/SlideView.ts';
 import router from '@/router';
 import { useRoute } from 'vue-router';
+import SlideTitle from '@/components/SlideTitle.vue';
 
 const route = useRoute();
 
@@ -38,3 +44,20 @@ watch(() => slide.path.value, () => {
     renderPdf(slide.path.value, "pdf-canvas");
 }, { immediate: true });
 </script>
+<style scoped>
+.pdf-canvas {
+    width: 100vw !important;
+    height: auto !important;
+    overflow: auto;
+    height: 70vh !important;
+}
+
+.control {
+    height: 20vh;
+}
+</style>
+<style>
+.slideTitle {
+    height: 10vh;
+}
+</style>
