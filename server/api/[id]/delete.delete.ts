@@ -1,0 +1,31 @@
+import prisma from "~/lib/prisma";
+
+export default defineEventHandler(async (event) => {
+    // パラメーターの取得
+    const id = getRouterParam(event, "id") as string;
+    checkPresentationId(id);
+    // 削除処理はトランザクションで行う
+    await prisma
+        .$transaction(async (tx) => {
+            await tx.slides.deleteMany({
+                where: {
+                    presentation_id: id,
+                },
+            });
+            await tx.presentations.delete({
+                where: {
+                    presentation_id: id,
+                },
+            });
+        })
+        .catch(() => {
+            throw createError({
+                statusCode: 500,
+                statusMessage: "Internal Server Error",
+            });
+        });
+    // return
+    return {
+        message: "success",
+    };
+});

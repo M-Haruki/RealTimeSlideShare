@@ -4,6 +4,10 @@ RTSS
 
 ## Prisma(ORM)
 
+[@prisma/nuxt](https://nuxt.com/modules/prisma)
+
+`npm install @prisma/nuxt`
+
 generatedディレクトリを.gitignoreに登録した
 
 マイグレーション

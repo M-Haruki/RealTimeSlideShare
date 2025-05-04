@@ -2,6 +2,7 @@ import { PDFDocument } from "pdf-lib";
 import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
+    // パラメーターの取得
     const title = getQuery(event)["title"]?.toString();
     const files = await readMultipartFormData(event);
     if (!files || files.length !== 1 || !title) {
@@ -85,30 +86,38 @@ export default defineEventHandler(async (event) => {
     // pdfs = pdfs.map((pdf) => Buffer.from(pdf));
 
     // DBに登録する(トランザクションを使用)
-    await prisma.$transaction(async (tx) => {
-        // プレゼンテーションの登録
-        await tx.presentations.create({
-            data: {
-                presentation_id: uuid,
-                title: title,
-                total_page: file_pdfDoc.getPageCount(),
-                current_page: 0, // 初期値を設定しているが、ないとエラーになるので、ここでも設定している
-            },
-        });
-        for (let i = 0; i < pdfs.length; i++) {
-            // スライドの登録
-            await tx.slides.create({
+    await prisma
+        .$transaction(async (tx) => {
+            // プレゼンテーションの登録
+            await tx.presentations.create({
                 data: {
                     presentation_id: uuid,
-                    page: i,
-                    content: pdfs[i],
+                    title: title,
+                    total_page: file_pdfDoc.getPageCount(),
+                    current_page: 0, // 初期値を設定しているが、ないとエラーになるので、ここでも設定している
                 },
             });
-        }
-    });
+            for (let i = 0; i < pdfs.length; i++) {
+                // スライドの登録
+                await tx.slides.create({
+                    data: {
+                        presentation_id: uuid,
+                        page: i,
+                        content: pdfs[i],
+                    },
+                });
+            }
+        })
+        .catch(() => {
+            throw createError({
+                statusCode: 500,
+                statusMessage: "Internal Server Error",
+            });
+        });
 
     // 権限付与!!
 
+    // return
     return {
         message: "OK",
         uuid: uuid,
