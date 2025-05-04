@@ -1,10 +1,8 @@
-import { checkPresentationId } from "~/server/utils/check_presentation_id";
 import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
-    const id = getRouterParam(event, "id") as string;
-    checkPresentationId(id);
+    const id = presentationId(event);
     // presentation情報を取得
     const presentation = await prisma.presentations
         .findUnique({

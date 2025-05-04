@@ -1,5 +1,6 @@
 import { PDFDocument } from "pdf-lib";
 import prisma from "~/lib/prisma";
+import { generateJwtToken, verifyJwtToken } from "../utils/jwt";
 
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
@@ -115,8 +116,32 @@ export default defineEventHandler(async (event) => {
             });
         });
 
-    // 権限付与!!
-
+    const permitted_ids = new Array<string>();
+    const cookies = parseCookies(event);
+    // すでに権限が付与されている場合は、そこに追加する
+    if (cookies.jwt) {
+        const decoded = verifyJwtToken(cookies.jwt);
+        if (decoded?.permitted_ids) {
+            decoded.permitted_ids.forEach((id) => permitted_ids.push(id));
+        }
+        if (!decoded) {
+            throw createError({
+                statusCode: 401,
+                statusMessage: "Unauthorized",
+            });
+        }
+    }
+    // 配列にUUIDを追加
+    permitted_ids.push(uuid);
+    // 権限付与
+    const expiresIn = 60 * 60 * 24 * 7; // 1 week
+    const token = generateJwtToken({ permitted_ids: permitted_ids }, expiresIn);
+    setCookie(event, "jwt", token, {
+        maxAge: expiresIn,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+    });
     // return
     return {
         message: "OK",

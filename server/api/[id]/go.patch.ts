@@ -2,8 +2,10 @@ import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
-    const id = getRouterParam(event, "id") as string;
-    checkPresentationId(id);
+    const id = presentationId(event);
+    // JWTの検証
+    checkPermission(event, id);
+    // 他のパラメーターの取得
     const page = Number(getQuery(event)["page"]);
     if (isNaN(page) || page < 0) {
         throw createError({
