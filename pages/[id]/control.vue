@@ -22,6 +22,7 @@ function deleteSlide() {
     })
 }
 </script>
+
 <style scoped>
 #pdfviewer {
     width: 100%;

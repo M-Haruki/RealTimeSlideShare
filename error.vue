@@ -1,7 +1,3 @@
-<script setup lang="ts">
-const error = useError()
-</script>
-
 <template>
   <div>
     <h1>{{ error?.statusCode }}</h1>
@@ -14,3 +10,7 @@ const error = useError()
     </p>
   </div>
 </template>
+
+<script setup lang="ts">
+const error = useError()
+</script>

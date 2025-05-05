@@ -15,6 +15,7 @@
         </form>
     </div>
 </template>
+
 <script lang="ts" setup>
 import { ref } from 'vue'
 
@@ -25,7 +26,6 @@ const isUploading = ref(false)
 function onFileChange(event: Event) {
     const target = event.target as HTMLInputElement
     files.value = target.files ?? null
-
     // ファイル選択時にファイル名を表示
     if (files.value && title.value == "") {
         title.value = files.value[0].name.replace(/\.pdf$/, '')

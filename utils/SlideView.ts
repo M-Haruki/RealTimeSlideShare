@@ -87,7 +87,7 @@ export class Slide {
     }
 }
 
-export function pdfviewerStyling() {
+export function pdfviewerStyling(): void {
     const pdfviewer = document.getElementById("pdfviewer") as HTMLIFrameElement;
     const iframeWindow = pdfviewer.contentWindow;
     if (iframeWindow) {
@@ -99,7 +99,5 @@ export function pdfviewerStyling() {
         if (viewerContainer) {
             viewerContainer.style.inset = "0px";
         }
-    } else {
-        console.error("iframeWindow is null");
     }
 }

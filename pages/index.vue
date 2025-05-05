@@ -7,6 +7,7 @@
         </div>
     </div>
 </template>
+
 <style scoped>
 .titles {
     text-align: center;

@@ -6,8 +6,7 @@
             :src="`/pdfjs/web/viewer.html?file=${slide.path}`" frameborder="0" />
     </div>
 </template>
+
 <script setup lang="ts">
 const slide = new Slide(useRoute().params.id as string)
-
-
 </script>

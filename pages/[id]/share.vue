@@ -10,13 +10,11 @@
         <canvas id="qr-canvas" />
     </div>
 </template>
+
 <script lang="ts" setup>
 import QRCode from "qrcode";
-
 const slide = new Slide(useRoute().params.id as string, false);
 const link = ref<string>("");
-
-
 onMounted(() => {
     link.value = `${location.origin}/${slide.id}/view`;
     QRCode.toCanvas(
