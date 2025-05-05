@@ -1,3 +1,5 @@
+type Timeout = NodeJS.Timeout; // Use this for Node.js
+
 export class Slide {
     id: string;
     isGo = ref({
@@ -8,32 +10,30 @@ export class Slide {
     current_page = ref<number>(0);
     title = ref<string>("");
     // path = ref<string>("");
-    // timeId: number = 0;
+    timeId: Timeout | null = null;
     constructor(id: string, isRealtime: boolean = true) {
         this.id = id;
         // isGo変数を同期させる
         watch(
             [this.current_page, this.total_page],
             () => {
-                this.checkGo();
+                this.checkIsGo();
             },
             { immediate: true, deep: true }
         );
-        // データの取得
-        $fetch(`/api/${this.id}/info`, { method: "get" })
-            .then((response) => {
-                this.title.value = response.title;
-                this.total_page.value = response.total_page;
-                this.current_page.value = response.current_page;
-            })
-            .catch(() => {
-                alert("スライド情報の取得に失敗しました");
-            });
+        // ルートを離れるときにタイマーをクリア
+        onBeforeRouteLeave(() => {
+            if (this.timeId) clearTimeout(this.timeId);
+        });
+        // データの取得(&以降自動で更新)
+        if (isRealtime) {
+            this.getInfo(true);
+        }
     }
     delete(success: () => void) {
         $fetch(`/api/${this.id}/delete`, { method: "delete" })
             .then(() => {
-                // clearTimeout(this.timeId);
+                if (this.timeId) clearTimeout(this.timeId);
                 success();
             })
             .catch(() => {
@@ -53,7 +53,7 @@ export class Slide {
                 alert("エラーが発生しました。");
             });
     }
-    checkGo() {
+    checkIsGo() {
         if (this.current_page.value + 1 < 0 || this.current_page.value + 1 >= this.total_page.value) {
             this.isGo.value.next = false;
         } else {
@@ -64,5 +64,25 @@ export class Slide {
         } else {
             this.isGo.value.prev = true;
         }
+    }
+    getInfo(re: boolean = false) {
+        // re: 再起呼び出しフラグ
+        $fetch(`/api/${this.id}/info`, { method: "get" })
+            .then((response) => {
+                this.title.value = response.title;
+                this.total_page.value = response.total_page;
+                if (this.current_page.value !== response.current_page) {
+                    this.current_page.value = response.current_page;
+                    // this.reloadSlide();
+                }
+                if (re) {
+                    // axios完了後に再起的に呼び出すことで、通信途中に連続してリクエストを送信することを防ぐ
+                    if (this.timeId) clearTimeout(this.timeId); //念の為clearTimeout
+                    this.timeId = setTimeout(() => this.getInfo(true), 5000); // 5秒ごと
+                }
+            })
+            .catch(() => {
+                alert("スライド情報の取得に失敗しました\nページをリロードしてください");
+            });
     }
 }

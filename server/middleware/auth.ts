@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
     }
     // パラメーターの取得
     const id = event.node.req.url?.match(/[0-9a-zA-Z]+/g)?.[0];
-    console.log(id);
     if (!id) {
         throw createError({
             statusCode: 400,

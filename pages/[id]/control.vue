@@ -1,8 +1,7 @@
 <template>
     <div>
         <h1>{{ slide.title }}</h1>
-        <p>スライドのページ数: {{ slide.total_page }}</p>
-        <p>現在のページ: {{ slide.current_page }}</p>
+        <p>page:{{ slide.current_page.value + 1 }}/{{ slide.total_page }}</p>
         <button v-if="slide.isGo.value.prev" @click="slide.go(slide.current_page.value - 1)">Back</button>
         <button v-else disabled>Back</button>
         <button v-if="slide.isGo.value.next" @click="slide.go(slide.current_page.value + 1)">Next</button>
