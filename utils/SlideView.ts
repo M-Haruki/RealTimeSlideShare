@@ -49,7 +49,6 @@ export class Slide {
         $fetch(`/api/${this.id}/go?page=${page}`, { method: "patch" })
             .then((res) => {
                 this.current_page.value = res.current_page;
-                // this.reloadSlide();
             })
             .catch(() => {
                 alert("エラーが発生しました。");
@@ -77,7 +76,6 @@ export class Slide {
                 this.total_page.value = response.total_page;
                 if (this.current_page.value !== response.current_page) {
                     this.current_page.value = response.current_page;
-                    // this.reloadSlide();
                 }
                 if (re) {
                     // axios完了後に再起的に呼び出すことで、通信途中に連続してリクエストを送信することを防ぐ
@@ -89,8 +87,4 @@ export class Slide {
                 alert("スライド情報の取得に失敗しました\nページをリロードしてください");
             });
     }
-    // reloadSlide() {
-    //     this.path.value = `/api/${this.id}/slide#${this.current_page.value}`;
-    //     console.log(`reloadSlide: ${this.path.value}`);
-    // }
 }

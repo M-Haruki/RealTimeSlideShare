@@ -17,7 +17,6 @@ const slide = new Slide(useRoute().params.id as string)
 function deleteSlide() {
     if (!confirm('本当に削除しますか？')) return
     slide.delete(() => {
-        alert('削除しました')
         navigateTo('/')
     })
 }
