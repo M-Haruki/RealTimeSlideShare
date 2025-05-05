@@ -1,12 +1,14 @@
 <template>
     <div>
-        <h1>Share</h1>
+        <SlideHeader :slide="slide" mode="share" />
         <p @click="$router.go(-1);">
             <u>back</u>
         </p>
         <p>title:{{ slide.title }}</p>
         <p>id:{{ slide.id }}</p>
         <p>link:<a :href="link">{{ link }}</a></p>
+        <p @click="shareLink">share</p>
+        <p>QR code:</p>
         <canvas id="qr-canvas" />
     </div>
 </template>
@@ -35,4 +37,17 @@ onMounted(() => {
         }
     );
 });
+// リンク共有
+function shareLink() {
+    try {
+        navigator.share({ title: `"${slide.title}"RealTimeSlideShare`, url: `${location.origin}/${slide.id}/view` })
+    } catch (e) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(location.href)
+            alert("リンクをコピーしました")
+        } else {
+            alert("リンクのコピー及び共有に対応していません")
+        }
+    }
+}
 </script>

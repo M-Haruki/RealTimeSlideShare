@@ -3,11 +3,11 @@
         <h1>新規プレゼンテーションの作成</h1>
         <form @submit.prevent="createPresentation">
             <label for="title">タイトル</label>
-            <input id="title" v-model="title" type="text" required maxlength="32">
+            <input id="title" v-model="title" type="text" required maxlength="32" :disabled="isUploading">
             <small>32字以内</small>
             <br>
             <label for="file">PDFファイル</label>
-            <input id="file" type="file" accept=".pdf" required @change="onFileChange">
+            <input id="file" type="file" accept=".pdf" required :disabled="isUploading" @change="onFileChange">
             <small>50MB以内、50ページ以内、1ページあたり最大1MB</small>
             <br>
             <p v-if="isUploading">アップロード中</p>
