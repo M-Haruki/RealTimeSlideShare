@@ -1,3 +1,4 @@
+import { log } from "node:console";
 import prisma from "~/lib/prisma";
 
 export default defineEventHandler(async (event) => {
@@ -39,7 +40,9 @@ export default defineEventHandler(async (event) => {
     return new Response(Buffer.from(slide.content), {
         headers: {
             "Content-Type": "application/pdf",
-            "Content-Disposition": `inline; filename="${presentation.title}-${presentation.current_page}.pdf"`,
+            "Content-Disposition": `inline; filename="${encodeURIComponent(presentation.title)}-${
+                presentation.current_page
+            }.pdf"`,
         },
         status: 200,
     });

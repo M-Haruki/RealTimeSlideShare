@@ -2,17 +2,18 @@ type Timeout = NodeJS.Timeout; // Use this for Node.js
 
 export class Slide {
     id: string;
+    path: string;
     isGo = ref({
         prev: false,
         next: false,
     });
-    total_page = ref<number>(0);
-    current_page = ref<number>(0);
-    title = ref<string>("");
-    // path = ref<string>("");
+    total_page = ref<number | null>(null);
+    current_page = ref<number | null>(null);
+    title = ref<string | null>(null);
     timeId: Timeout | null = null;
     constructor(id: string, isRealtime: boolean = true) {
         this.id = id;
+        this.path = `/api/${this.id}/slide`;
         // isGo変数を同期させる
         watch(
             [this.current_page, this.total_page],
@@ -41,28 +42,31 @@ export class Slide {
             });
     }
     go(page: number) {
-        if (page < 0 || page >= this.total_page.value) {
+        if (page < 0 || this.total_page.value === null || page >= this.total_page.value) {
             alert("ページ数が不正です。");
             return;
         }
         $fetch(`/api/${this.id}/go?page=${page}`, { method: "patch" })
             .then((res) => {
                 this.current_page.value = res.current_page;
+                // this.reloadSlide();
             })
             .catch(() => {
                 alert("エラーが発生しました。");
             });
     }
     checkIsGo() {
-        if (this.current_page.value + 1 < 0 || this.current_page.value + 1 >= this.total_page.value) {
-            this.isGo.value.next = false;
-        } else {
-            this.isGo.value.next = true;
-        }
-        if (this.current_page.value - 1 < 0 || this.current_page.value - 1 >= this.total_page.value) {
-            this.isGo.value.prev = false;
-        } else {
-            this.isGo.value.prev = true;
+        if (this.current_page.value !== null && this.total_page.value !== null) {
+            if (this.current_page.value + 1 < 0 || this.current_page.value + 1 >= this.total_page.value) {
+                this.isGo.value.next = false;
+            } else {
+                this.isGo.value.next = true;
+            }
+            if (this.current_page.value - 1 < 0 || this.current_page.value - 1 >= this.total_page.value) {
+                this.isGo.value.prev = false;
+            } else {
+                this.isGo.value.prev = true;
+            }
         }
     }
     getInfo(re: boolean = false) {
@@ -85,4 +89,8 @@ export class Slide {
                 alert("スライド情報の取得に失敗しました\nページをリロードしてください");
             });
     }
+    // reloadSlide() {
+    //     this.path.value = `/api/${this.id}/slide#${this.current_page.value}`;
+    //     console.log(`reloadSlide: ${this.path.value}`);
+    // }
 }
