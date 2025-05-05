@@ -86,3 +86,20 @@ export class Slide {
             });
     }
 }
+
+export function pdfviewerStyling() {
+    const pdfviewer = document.getElementById("pdfviewer") as HTMLIFrameElement;
+    const iframeWindow = pdfviewer.contentWindow;
+    if (iframeWindow) {
+        const toolbar = iframeWindow.document.getElementsByClassName("toolbar")[0] as HTMLDivElement;
+        const viewerContainer = iframeWindow.document.getElementById("viewerContainer") as HTMLDivElement;
+        if (toolbar) {
+            toolbar.style.display = "none";
+        }
+        if (viewerContainer) {
+            viewerContainer.style.inset = "0px";
+        }
+    } else {
+        console.error("iframeWindow is null");
+    }
+}
