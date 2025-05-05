@@ -10,6 +10,7 @@
         <p @click="shareLink">share</p>
         <p>QR code:</p>
         <canvas id="qr-canvas" />
+        <SlideFooter />
     </div>
 </template>
 

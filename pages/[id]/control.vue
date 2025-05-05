@@ -15,6 +15,7 @@
         <button @click="deleteSlide">削除</button>
         <iframe id="pdfviewer" :key="(slide.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
             :src="`/pdfjs/web/viewer.html?file=${slide.path}`" frameborder="0" />
+        <SlideFooter />
     </div>
 </template>
 
