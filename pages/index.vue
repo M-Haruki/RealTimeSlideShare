@@ -8,24 +8,24 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .titles {
     text-align: center;
     width: 100vw;
     height: 60vh;
-    background-color: var(--color-primary);
+    background-color: $color-primary;
 }
 
 .title {
     font-size: 5rem;
-    color: var(--color-white);
+    // color: var(--color-white);
 }
 
 #registerButton {
     width: 100px;
     height: 50px;
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: $color-primary;
+    // color: $color-white;
     text-align: center;
     line-height: 50px;
     border-radius: 10px;

@@ -16,6 +16,5 @@ iframe {
     display: block; // これでiframeの外の余白を消す
     width: 100vw;
     height: calc(100vh - $header-height - $footer-height);
-    background-color: $color-body-primary;
 }
 </style>

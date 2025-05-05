@@ -12,13 +12,17 @@
                 <Icon name="humbleicons:arrow-go-back" />
                 <label>Back</label>
             </div>
+            <div v-if="mode == 'control'" class="menu-item" @click="deleteSlide">
+                <Icon name="humbleicons:trash" />
+                <label>Delete</label>
+            </div>
         </div>
     </header>
 </template>
 
 <script setup lang="ts">
 type Mode = 'control' | 'share' | 'view'
-defineProps({
+const props = defineProps({
     slide: {
         type: Object,
         required: true
@@ -29,6 +33,14 @@ defineProps({
         default: ''
     },
 })
+
+// delete処理
+function deleteSlide() {
+    if (!confirm('本当に削除しますか？')) return
+    props.slide.delete(() => {
+        navigateTo('/')
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -59,7 +71,11 @@ header {
     }
 
     .menu {
+        display: flex;
+        gap: 8px;
+
         .menu-item {
+            cursor: pointer;
             height: calc($header-height * 0.8);
             width: calc($header-height * 0.8);
             display: flex;
@@ -78,6 +94,7 @@ header {
             }
 
             label {
+                cursor: pointer;
                 font-size: 0.8rem;
             }
         }
