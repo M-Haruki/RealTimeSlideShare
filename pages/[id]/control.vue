@@ -1,5 +1,6 @@
 <template>
     <div>
+        <NuxtLink :to="`/${slide.id}/share`">share</NuxtLink>
         <h1>{{ slide.title }}</h1>
         <p>page:{{ (slide.current_page.value ?? -1) + 1 }}/{{ slide.total_page.value ?? 0 }}</p>
         <button v-if="slide.isGo.value.prev" @click="slide.go((slide.current_page.value ?? 0) - 1)">Back</button>

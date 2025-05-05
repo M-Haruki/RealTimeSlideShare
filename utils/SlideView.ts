@@ -27,9 +27,7 @@ export class Slide {
             if (this.timeId) clearTimeout(this.timeId);
         });
         // データの取得(&以降自動で更新)
-        if (isRealtime) {
-            this.getInfo(true);
-        }
+        this.getInfo(isRealtime);
     }
     delete(success: () => void) {
         $fetch(`/api/${this.id}/delete`, { method: "delete" })
