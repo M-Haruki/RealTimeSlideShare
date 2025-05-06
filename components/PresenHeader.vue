@@ -1,29 +1,31 @@
 <template>
     <header>
         <div class="titles">
-            <span class="title">{{ slide.title }}</span>
+            <span class="title">{{ presen.title }}</span>
         </div>
         <div class="menu">
-            <NuxtLink v-if="mode != 'share'" class="menu-item" :to="`/${slide.id}/share`">
-                <Icon name="humbleicons:share" />
-                <label>Share</label>
-            </NuxtLink>
-            <div v-else class="menu-item" @click="$router.go(-1);">
-                <Icon name="humbleicons:arrow-go-back" />
-                <label>Back</label>
-            </div>
             <div v-if="mode == 'control'" class="menu-item" @click="deleteSlide">
                 <Icon name="humbleicons:trash" />
                 <label>Delete</label>
             </div>
+            <div v-if="!isShowShare" class="menu-item" @click="isShowShare = true">
+                <Icon name="humbleicons:share" />
+                <label>Share</label>
+            </div>
+            <div v-else class="menu-item" @click="isShowShare = false">
+                <Icon name="humbleicons:times" />
+                <label>Close</label>
+            </div>
         </div>
     </header>
+    <SharePopup :presen="presen" />
 </template>
 
 <script setup lang="ts">
+const isShowShare = useState('isShowShare')
 type Mode = 'control' | 'share' | 'view'
 const props = defineProps({
-    slide: {
+    presen: {
         type: Object,
         required: true
     },
@@ -37,7 +39,7 @@ const props = defineProps({
 // delete処理
 function deleteSlide() {
     if (!confirm('本当に削除しますか？')) return
-    props.slide.delete(() => {
+    props.presen.delete(() => {
         navigateTo('/')
     })
 }
@@ -85,7 +87,7 @@ header {
             color: $color-body-primary;
             text-decoration: none;
             border-radius: 10px;
-            background-color: $color-tertiary;
+            background-color: $color-secondary;
             padding: 3px;
 
             span.iconify {

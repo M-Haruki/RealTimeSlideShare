@@ -1,14 +1,14 @@
 <template>
     <div>
-        <SlideHeader :slide="slide" mode="view" />
-        <iframe id="pdfviewer" :key="(slide.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
-            :src="`/pdfjs/web/viewer.html?file=${slide.path}`" frameborder="0" />
-        <SlideFooter />
+        <PresenHeader :presen="presen" mode="view" />
+        <iframe id="pdfviewer" :key="(presen.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
+            :src="`/pdfjs/web/viewer.html?file=${presen.path}`" frameborder="0" />
+        <PresenFooter />
     </div>
 </template>
 
 <script setup lang="ts">
-const slide = new Slide(useRoute().params.id as string)
+const presen = new Presentation(useRoute().params.id as string)
 </script>
 
 <style scoped lang="scss">

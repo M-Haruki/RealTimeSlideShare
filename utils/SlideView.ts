@@ -1,6 +1,6 @@
 type Timeout = NodeJS.Timeout; // Use this for Node.js
 
-export class Slide {
+export class Presentation {
     id: string;
     path: string;
     isGo = ref({

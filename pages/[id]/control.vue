@@ -1,44 +1,44 @@
 <template>
     <div>
-        <SlideHeader :slide="slide" mode="control" />
+        <PresenHeader :presen="presen" mode="control" />
         <div class="content">
-            <iframe id="pdfviewer" :key="(slide.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
-                :src="`/pdfjs/web/viewer.html?file=${slide.path}`" frameborder="0" />
+            <iframe id="pdfviewer" :key="(presen.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
+                :src="`/pdfjs/web/viewer.html?file=${presen.path}`" frameborder="0" />
             <div class="page-controller">
-                <div class="button prev" :class="slide.isGo.value.prev ? '' : 'disabled'"
-                    @click="slide.go((slide.current_page.value ?? 0) - 1)">
-                    <Icon name="humbleicons:skip-backward" />
+                <div class="button prev" :class="presen.isGo.value.prev ? '' : 'disabled'"
+                    @click="presen.go((presen.current_page.value ?? 0) - 1)">
+                    <Icon name="humbleicons:arrow-left" />
                 </div>
                 <span class="page-number">
                     <input v-model="current_page_vmodel" type="text" @blur="commitInput">
                     /
-                    {{ slide.total_page.value ?? 0 }}
+                    {{ presen.total_page.value ?? 0 }}
                 </span>
-                <div class="button next" :class="slide.isGo.value.next ? '' : 'disabled'"
-                    @click="slide.go((slide.current_page.value ?? 0) + 1)">
-                    <Icon name="humbleicons:skip-forward" />
+                <div class="button next" :class="presen.isGo.value.next ? '' : 'disabled'"
+                    @click="presen.go((presen.current_page.value ?? 0) + 1)">
+                    <Icon name="humbleicons:arrow-right" />
                 </div>
             </div>
         </div>
-        <SlideFooter />
+        <PresenFooter />
     </div>
 </template>
 
 <script setup lang="ts">
-const slide = new Slide(useRoute().params.id as string)
+const presen = new Presentation(useRoute().params.id as string)
 const current_page_vmodel = ref(0)
-// slide.current_pageとの同期
-watch(slide.current_page, (val) => {
+// presen.current_pageとの同期
+watch(presen.current_page, (val) => {
     current_page_vmodel.value = (val ?? 0) + 1
 })
 // inputからフォーカスが離れたときに、正しい値か判定して、送信する
 function commitInput() {
-    if (current_page_vmodel.value < 1 || slide.total_page.value === null || current_page_vmodel.value > slide.total_page.value) {
+    if (current_page_vmodel.value < 1 || presen.total_page.value === null || current_page_vmodel.value > presen.total_page.value) {
         // 値を修正する
-        current_page_vmodel.value = (slide.current_page.value ?? 0) + 1
+        current_page_vmodel.value = (presen.current_page.value ?? 0) + 1
         return
     }
-    slide.go(current_page_vmodel.value - 1)
+    presen.go(current_page_vmodel.value - 1)
 }
 </script>
 
@@ -73,13 +73,13 @@ function commitInput() {
             align-items: center;
             cursor: pointer;
             color: $color-body-primary;
-            background-color: $color-tertiary;
-            font-size: 2rem;
+            background-color: $color-secondary;
+            font-size: 3rem;
             border-radius: 10px;
             margin: 0 10px;
 
             &.disabled {
-                background-color: $color-secondary;
+                background-color: $color-gray;
                 cursor: not-allowed;
             }
         }
@@ -99,12 +99,12 @@ function commitInput() {
                 text-align: center;
                 border-radius: 10px;
                 border: none;
-                background-color: $color-tertiary;
+                background-color: $color-secondary;
                 color: $color-body-primary;
 
                 &:focus {
                     outline: none;
-                    background-color: $color-secondary;
+                    background-color: $color-accent;
                 }
             }
         }
