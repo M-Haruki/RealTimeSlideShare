@@ -6,7 +6,7 @@
                 :src="`/pdfjs/web/viewer.html?file=${presen.path}`" frameborder="0" />
             <div class="page-controller">
                 <div class="button prev" :class="presen.isGo.value.prev ? '' : 'disabled'"
-                    @click="presen.go((presen.current_page.value ?? 0) - 1)">
+                    @click="presen.isGo.value.prev && presen.go((presen.current_page.value ?? 0) - 1)">
                     <Icon name="humbleicons:arrow-left" />
                 </div>
                 <span class="page-number">
@@ -15,7 +15,7 @@
                     {{ presen.total_page.value ?? 0 }}
                 </span>
                 <div class="button next" :class="presen.isGo.value.next ? '' : 'disabled'"
-                    @click="presen.go((presen.current_page.value ?? 0) + 1)">
+                    @click="presen.isGo.value.next && presen.go((presen.current_page.value ?? 0) + 1)">
                     <Icon name="humbleicons:arrow-right" />
                 </div>
             </div>

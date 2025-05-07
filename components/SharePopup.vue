@@ -116,6 +116,7 @@ function shareLink() {
             margin-top: 20px;
             cursor: pointer;
             flex-shrink: 0;
+            font-size: 1.5rem;
         }
 
         #qr-canvas {
