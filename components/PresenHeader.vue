@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="titles">
-            <span class="title">{{ presen.title }}</span>
+            <h1 class="title">{{ presen.title }}</h1>
         </div>
         <div class="menu">
             <div v-if="mode == 'control'" class="menu-item" @click="deleteSlide">

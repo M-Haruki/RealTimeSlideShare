@@ -1,6 +1,7 @@
 <template>
     <footer>
-        <p>Provided by <NuxtLink class="link" to="/">RealTimeSlideShare</NuxtLink>
+        <p>
+            Provided by <NuxtLink class="link" to="/">RealTimeSlideShare</NuxtLink>
         </p>
     </footer>
 </template>
