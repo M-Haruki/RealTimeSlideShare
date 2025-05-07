@@ -2,6 +2,7 @@
   <div>
     <NuxtRouteAnnouncer />
     <NuxtPage />
+    <PresenFooter />
   </div>
 </template>
 <script setup lang="ts">

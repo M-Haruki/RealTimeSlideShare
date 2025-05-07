@@ -3,7 +3,6 @@
         <PresenHeader :presen="presen" mode="view" />
         <iframe id="pdfviewer" :key="(presen.current_page.value ?? -1)" :onload="() => pdfviewerStyling()"
             :src="`/pdfjs/web/viewer.html?file=${presen.path}`" frameborder="0" />
-        <PresenFooter />
     </div>
 </template>
 

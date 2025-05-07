@@ -24,7 +24,6 @@
                 </div>
             </form>
         </div>
-        <PresenFooter />
     </div>
 </template>
 

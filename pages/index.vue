@@ -1,36 +1,79 @@
 <template>
-    <div>
+    <div class="content">
         <div class="titles">
-            <p class="title">RealTimeSlideShare</p>
+            <h1 class="title">Real Time Slide Share</h1>
+            <p>
+                <b>Present Together, Effortlessly.</b><br>
+                Upload your PDF and share a real-time presentation. As you turn the slides, your audience sees exactly
+                what you see — instantly and in sync.
+            </p>
         </div>
-        <div id="registerButton" @click="navigateTo('/register')">登録
+        <div class="description">
+            <div id="registerButton" @click="navigateTo('/register')">
+                Create Presentation
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.titles {
-    text-align: center;
-    width: 100vw;
-    height: 60vh;
-    background-color: $color-primary;
-}
+.content {
+    overflow-x: hidden;
 
-.title {
-    font-size: 5rem;
-    // color: var(--color-white);
-}
+    .titles {
+        text-align: center;
+        width: 100vw;
+        height: 50vh;
+        background-color: $color-primary;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
 
-#registerButton {
-    width: 100px;
-    height: 50px;
-    background-color: $color-primary;
-    // color: $color-white;
-    text-align: center;
-    line-height: 50px;
-    border-radius: 10px;
-    margin: 0 auto;
-    margin-top: 20px;
-    cursor: pointer;
+        .title {
+            font-size: 3rem;
+            color: $color-body-primary;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: $color-body-primary;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+    }
+
+    .description {
+        width: 100vw;
+        height: 50vh;
+        background-color: $color-tertiary;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        flex-direction: column;
+
+        #registerButton {
+            width: 75%;
+            max-width: 500px;
+            height: 60px;
+            background-color: $color-secondary;
+            text-align: center;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-top: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: $color-body-primary;
+
+            &:hover {
+                background-color: $color-accent;
+            }
+        }
+    }
 }
 </style>
