@@ -15,4 +15,9 @@ export default defineNuxtConfig({
             },
         },
     },
+    runtimeConfig: {
+        public: {
+            appVersion: "v0.0.1",
+        },
+    },
 });
