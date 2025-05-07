@@ -1,7 +1,9 @@
 <template>
     <div>
         <header>
-            <h1>RealTimeSlideShare</h1>
+            <h1>
+                <NuxtLink class="link" to="/">RealTimeSlideShare</NuxtLink>
+            </h1>
         </header>
         <div class="content">
             <h2>Create New Presentation</h2>
@@ -104,6 +106,11 @@ header {
         font-size: 1.5rem;
         font-weight: bold;
         align-items: center;
+
+        .link {
+            color: $color-body-primary;
+            text-decoration: none;
+        }
     }
 }
 
@@ -119,7 +126,7 @@ header {
 
     h2 {
         font-size: 1.5rem;
-        margin-bottom: 1rem;
+        margin: 5px 0 15px 0;
         text-decoration: underline;
     }
 
@@ -136,7 +143,7 @@ header {
             justify-content: start;
             align-items: center;
             width: 100%;
-            margin: 15px 0;
+            margin: 10px 0;
 
             label {
                 font-size: 1.2rem;

@@ -81,8 +81,13 @@ export class Presentation {
                     this.timeId = setTimeout(() => this.getInfo(true), 5000); // 5秒ごと
                 }
             })
-            .catch(() => {
-                alert("スライド情報の取得に失敗しました\nページをリロードしてください");
+            .catch((e) => {
+                if (e.status === 404) {
+                    alert("スライドが存在しません");
+                    navigateTo("/");
+                } else {
+                    alert("スライド情報の取得に失敗しました\nページをリロードしてください");
+                }
             });
     }
 }
