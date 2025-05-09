@@ -6,15 +6,15 @@
         <div class="menu">
             <div v-if="mode == 'control'" class="menu-item" @click="deleteSlide">
                 <Icon name="humbleicons:trash" />
-                <label>Delete</label>
+                <label>{{ $t("view_delete") }}</label>
             </div>
             <div v-if="!isShowShare" class="menu-item" @click="isShowShare = true">
                 <Icon name="humbleicons:share" />
-                <label>Share</label>
+                <label>{{ $t("view_share") }}</label>
             </div>
             <div v-else class="menu-item" @click="isShowShare = false">
                 <Icon name="humbleicons:times" />
-                <label>Close</label>
+                <label>{{ $t("view_close") }}</label>
             </div>
         </div>
     </header>

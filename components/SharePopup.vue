@@ -4,7 +4,7 @@
             <p class="title">"{{ presen.title }}"</p>
             <p class="id">({{ presen.id }})</p>
             <p class="link"><a :href="link">{{ link }}</a></p>
-            <div class="shareButton" @click="shareLink">Share</div>
+            <div class="shareButton" @click="shareLink">{{ $t("view_share") }}</div>
             <canvas id="qr-canvas" />
         </div>
     </div>

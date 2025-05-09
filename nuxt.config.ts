@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@nuxt/eslint", "@nuxt/icon", "@prisma/nuxt"],
+    modules: ["@nuxt/eslint", "@nuxt/icon", "@prisma/nuxt", "@nuxtjs/i18n"],
     css: ["~/assets/css/main.scss"],
     vite: {
         css: {
@@ -19,5 +19,15 @@ export default defineNuxtConfig({
         public: {
             appVersion: "v0.0.1",
         },
+    },
+    i18n: {
+        strategy: "no_prefix",
+        defaultLocale: "en",
+        locales: [
+            { code: "en", language: "en-US", name: "English", file: "en.ts" },
+            { code: "ja", language: "ja-JP", name: "Japanese", file: "ja.ts" },
+        ],
+        langDir: "../locales/",
+        lazy: true,
     },
 });

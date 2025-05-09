@@ -1,0 +1,25 @@
+export default defineI18nLocale(async () => ({
+    catchphrase: "Present Together, Effortlessly.",
+    shortDescription:
+        " Upload your PDF and share a real-time presentation. As you turn the slides, your audience sees exactly what you see — instantly and in sync.",
+    desc1_title: "Present Smarter",
+    desc1_text: "No bulky displays required. Simply upload your PDF and share a URL to start your slideshow anywhere.",
+    desc2_title: "Real-Time Sync",
+    desc2_text: "Flip your slides, and your audience’s view updates instantly. Devices typically sync within seconds.",
+    desc3_title: "Presenter-Driven Pace",
+    desc3_text: "No more audience jumping ahead. Slides advance exactly in time with your presentation.",
+    desc4_title: "You Control Your Content",
+    desc4_text:
+        "Keep full control of your materials—audiences can’t download or take them with them without your permission (though technically possible under specific settings).",
+    createButton: "Create Presentation",
+    register_h: "Create New Presentation",
+    register_title: "Title",
+    register_title_detail: "Max 32 characters",
+    register_pdf: "PDF File",
+    register_pdf_detail: "Maximum 50 MB total, up to 50 pages, with each page no larger than 1 MB",
+    register_button: "Upload & Create",
+    register_button_processing: "Uploading...",
+    view_delete: "Delete",
+    view_share: "Share",
+    view_close: "Close",
+}));

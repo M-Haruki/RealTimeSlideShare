@@ -1,0 +1,28 @@
+export default defineI18nLocale(async () => ({
+    catchphrase: "プレゼンをシームレスに",
+    shortDescription:
+        "PDFをアップロードしてリアルタイムにプレゼンを共有。スライドをめくると、聴衆の画面も瞬時に同期して同じ内容が表示されます。",
+    desc1_title: "プレゼンをもっとスマートに",
+    desc1_text:
+        "大きなモニターはもう不要。PDFをアップロードしてURLを共有するだけで、どこでもすぐにスライドショーを開始できます。",
+    desc2_title: "リアルタイム同期",
+    desc2_text:
+        "あなたがスライドをめくると、聴衆の画面も同時に切り替わります。通常、各端末は数秒以内に同期完了します。",
+    desc3_title: "発表者のペースで",
+    desc3_text:
+        "聴衆が先のスライドに飛ぶ心配はありません。あなたの話すテンポに合わせて、確実に画面を切り替えられます。",
+    desc4_title: "資料は発表者がコントロール",
+    desc4_text:
+        "配布用の資料は、あなた自身が管理すべきです。聴衆が勝手にダウンロードして持ち帰ることはできません。（技術的には可能な点にご留意ください。）",
+    createButton: "プレゼンテーションを作成",
+    register_h: "新規プレゼンテーションを作成",
+    register_title: "タイトル",
+    register_title_detail: "最大32文字",
+    register_pdf: "PDFファイル",
+    register_pdf_detail: "合計最大50MB、50ページ以内、1ページあたり最大1MB",
+    register_button: "アップロードして作成",
+    register_button_processing: "アップロード中...",
+    view_delete: "削除",
+    view_share: "共有",
+    view_close: "閉じる",
+}));

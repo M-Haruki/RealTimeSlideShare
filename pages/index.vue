@@ -3,14 +3,29 @@
         <div class="titles">
             <h1 class="title">Real Time Slide Share</h1>
             <p>
-                <b>Present Together, Effortlessly.</b><br>
-                Upload your PDF and share a real-time presentation. As you turn the slides, your audience sees exactly
-                what you see — instantly and in sync.
+                <b>{{ $t("catchphrase") }}</b><br>
+                {{ $t("shortDescription") }}
             </p>
         </div>
         <div class="description">
             <div id="registerButton" @click="navigateTo('/register')">
-                Create Presentation
+                <p>{{ $t("createButton") }}</p>
+            </div>
+            <div>
+                <h2>{{ $t("desc1_title") }}</h2>
+                <p>{{ $t("desc1_text") }}</p>
+            </div>
+            <div>
+                <h2>{{ $t("desc2_title") }}</h2>
+                <p>{{ $t("desc2_text") }}</p>
+            </div>
+            <div>
+                <h2>{{ $t("desc3_title") }}</h2>
+                <p>{{ $t("desc3_text") }}</p>
+            </div>
+            <div>
+                <h2>{{ $t("desc4_title") }}</h2>
+                <p>{{ $t("desc4_text") }}</p>
             </div>
         </div>
     </div>

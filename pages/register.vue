@@ -6,21 +6,21 @@
             </h1>
         </header>
         <div class="content">
-            <h2>Create New Presentation</h2>
+            <h2>{{ $t("register_h") }}</h2>
             <form @submit.prevent="createPresentation">
                 <div class="group">
-                    <label for="title">Title</label>
+                    <label for="title">{{ $t("register_title") }}</label>
                     <input id="title" v-model="title" type="text" required maxlength="32" :disabled="isUploading">
-                    <small>Max 32 characters</small>
+                    <small>{{ $t("register_title_detail") }}</small>
                 </div>
                 <div class="group">
-                    <label for="file">PDF File</label>
+                    <label for="file">{{ $t("register_pdf") }}</label>
                     <input id="file" type="file" accept=".pdf" required :disabled="isUploading" @change="onFileChange">
-                    <small>Maximum 50 MB total, up to 50 pages, with each page no larger than 1 MB</small>
+                    <small>{{ $t("register_pdf_detail") }}</small>
                 </div>
                 <div class="group">
-                    <button v-if="isUploading" disabled>Uploading...</button>
-                    <button v-else type="submit">Upload & Create</button>
+                    <button v-if="isUploading" disabled>{{ $t("register_button_processing") }}</button>
+                    <button v-else type="submit">{{ $t("register_button") }}</button>
                 </div>
             </form>
         </div>
