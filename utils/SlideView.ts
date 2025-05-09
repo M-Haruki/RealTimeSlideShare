@@ -1,5 +1,4 @@
 type Timeout = NodeJS.Timeout; // Use this for Node.js
-const { t } = useI18n();
 
 export class Presentation {
     id: string;
@@ -31,18 +30,20 @@ export class Presentation {
         this.getInfo(isRealtime);
     }
     delete(success: () => void) {
+        const { $i18n } = useNuxtApp();
         $fetch(`/api/${this.id}/delete`, { method: "delete" })
             .then(() => {
                 if (this.timeId) clearTimeout(this.timeId);
                 success();
             })
             .catch(() => {
-                alert(t("error_alert"));
+                alert($i18n.t("error_alert"));
             });
     }
     go(page: number) {
+        const { $i18n } = useNuxtApp();
         if (page < 0 || this.total_page.value === null || page >= this.total_page.value) {
-            alert(t("slide_error_alert_page"));
+            alert($i18n.t("slide_error_alert_page"));
             return;
         }
         $fetch(`/api/${this.id}/go?page=${page}`, { method: "patch" })
@@ -50,7 +51,7 @@ export class Presentation {
                 this.current_page.value = res.current_page;
             })
             .catch(() => {
-                alert(t("error_alert"));
+                alert($i18n.t("error_alert"));
             });
     }
     checkIsGo() {
@@ -69,6 +70,7 @@ export class Presentation {
     }
     getInfo(re: boolean = false) {
         // re: 再起呼び出しフラグ
+        const { $i18n } = useNuxtApp();
         $fetch(`/api/${this.id}/info`, { method: "get" })
             .then((response) => {
                 this.title.value = response.title;
@@ -84,10 +86,10 @@ export class Presentation {
             })
             .catch((e) => {
                 if (e.status === 404) {
-                    alert(t("slide_error_alert_not_found"));
+                    alert($i18n.t("slide_error_alert_not_found"));
                     navigateTo("/");
                 } else {
-                    alert(t("slide_error_alert_failed"));
+                    alert($i18n.t("slide_error_alert_failed"));
                 }
             });
     }

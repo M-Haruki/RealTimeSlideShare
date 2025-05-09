@@ -24,8 +24,6 @@ footer {
     padding: 2px 10px;
     display: flex;
     align-items: center;
-    position: absolute;
-    bottom: 0;
 
     .powered {
         font-size: 1rem;
