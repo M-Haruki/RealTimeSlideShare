@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import QRCode from "qrcode";
+const { t } = useI18n()
 const isShowShare = useState('isShowShare')
 const props = defineProps({
     presen: {
@@ -51,9 +52,9 @@ function shareLink() {
     } catch (e) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(location.href)
-            alert("リンクをコピーしました")
+            alert(t("view_share_link_alert"))
         } else {
-            alert("リンクのコピー及び共有に対応していません")
+            alert(t("view_share_link_alert_error"))
         }
     }
 }

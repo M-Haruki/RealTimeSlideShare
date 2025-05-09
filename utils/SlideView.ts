@@ -1,4 +1,5 @@
 type Timeout = NodeJS.Timeout; // Use this for Node.js
+const { t } = useI18n();
 
 export class Presentation {
     id: string;
@@ -36,12 +37,12 @@ export class Presentation {
                 success();
             })
             .catch(() => {
-                alert("エラーが発生しました。");
+                alert(t("error_alert"));
             });
     }
     go(page: number) {
         if (page < 0 || this.total_page.value === null || page >= this.total_page.value) {
-            alert("ページ数が不正です。");
+            alert(t("slide_error_alert_page"));
             return;
         }
         $fetch(`/api/${this.id}/go?page=${page}`, { method: "patch" })
@@ -49,7 +50,7 @@ export class Presentation {
                 this.current_page.value = res.current_page;
             })
             .catch(() => {
-                alert("エラーが発生しました。");
+                alert(t("error_alert"));
             });
     }
     checkIsGo() {
@@ -83,10 +84,10 @@ export class Presentation {
             })
             .catch((e) => {
                 if (e.status === 404) {
-                    alert("スライドが存在しません");
+                    alert(t("slide_error_alert_not_found"));
                     navigateTo("/");
                 } else {
-                    alert("スライド情報の取得に失敗しました\nページをリロードしてください");
+                    alert(t("slide_error_alert_failed"));
                 }
             });
     }

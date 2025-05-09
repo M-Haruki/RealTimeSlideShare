@@ -29,6 +29,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+const { t } = useI18n()
 
 const title = ref('')
 const files = ref<FileList | null>(null)
@@ -46,7 +47,7 @@ function onFileChange(event: Event) {
 function createPresentation() {
     isUploading.value = true;
     if (!title.value || title.value == "" || !files.value) {
-        alert('タイトルとファイルを入力してください');
+        alert(t("register_alert_input"));
         return;
     }
     const formData = new FormData();
@@ -57,32 +58,32 @@ function createPresentation() {
         // contentTypeを設定したらエラーが出たので、設定しない
     }).then((response) => {
         isUploading.value = false;
-        alert('プレゼンテーションを作成しました');
+        alert(t("register_success_alert"));
         navigateTo(`/${response.uuid}/control`);
     }).catch((error) => {
         isUploading.value = false;
-        if (!error.data || !error.data.reason) {
-            alert('エラーが発生しました');
+        if (!error.data || !error.data.data || !error.data.data.reason) {
+            alert(t("error_alert"));
             return;
         }
         switch (error.data.data.reason) {
             case "size":
-                alert('ファイルのサイズが50MB以上です');
+                alert(t("register_error_alert_size"));
                 break;
             case "content_type":
-                alert('PDF以外のファイルは受け付けられません');
+                alert(t("register_error_alert_content_type"));
                 break;
             case "title_length":
-                alert('タイトルが32字を超えています');
+                alert(t("register_error_alert_title_length"));
                 break;
             case "page_num":
-                alert('ページ数が50ページ以上です');
+                alert(t("register_error_alert_page_num"));
                 break;
             case "pdf_error":
-                alert('PDF処理エラーです');
+                alert(t("register_error_alert_pdf_error"));
                 break;
             default:
-                alert('エラーが発生しました');
+                alert(t("error_alert"));
                 break;
         }
     });

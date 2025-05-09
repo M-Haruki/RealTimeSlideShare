@@ -22,6 +22,8 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n()
+
 const isShowShare = useState('isShowShare')
 type Mode = 'control' | 'share' | 'view'
 const props = defineProps({
@@ -38,7 +40,7 @@ const props = defineProps({
 
 // delete処理
 function deleteSlide() {
-    if (!confirm('本当に削除しますか？')) return
+    if (!confirm(t("view_delete_alert"))) return
     props.presen.delete(() => {
         navigateTo('/')
     })
