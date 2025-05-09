@@ -169,7 +169,7 @@ onMounted(() => {
             .container {
                 width: 60%;
                 max-width: 800px;
-                margin-bottom: 50px;
+                margin-bottom: 30px;
                 text-align: left;
 
                 transition: all 1s ease-in-out;

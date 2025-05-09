@@ -1,6 +1,5 @@
 import { PDFDocument } from "pdf-lib";
 import prisma from "~/lib/prisma";
-import { generateJwtToken, verifyJwtToken } from "../utils/jwt";
 
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
