@@ -12,6 +12,7 @@
                 <div id="registerButton" @click="navigateTo('/register')">
                     <p>{{ $t("createButton") }}</p>
                 </div>
+                <p class="caution">{{ $t("desc_caution") }}</p>
             </div>
             <div class="description">
                 <div v-for="(desc, index) in description" :key="index" class="container">
@@ -125,6 +126,7 @@ onMounted(() => {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
 
             #registerButton {
                 width: 80%;
@@ -144,6 +146,15 @@ onMounted(() => {
                 &:hover {
                     background-color: $color-accent;
                 }
+            }
+
+            .caution {
+                margin-top: 20px;
+                font-size: 1.2rem;
+                color: $color-body-primary;
+                width: 80%;
+                max-width: 800px;
+                text-align: center;
             }
         }
 

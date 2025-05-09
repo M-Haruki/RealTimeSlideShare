@@ -10,8 +10,9 @@ export default defineI18nLocale(async () => ({
     desc3_text: "No more audience jumping ahead. Slides advance exactly in time with your presentation.",
     desc4_title: "You Control Your Content",
     desc4_text:
-        "Keep full control of your materials—audiences can’t download or take them with them without your permission (though technically possible under specific settings).",
+        "You can delete slides whenever you want. If not explicitly deleted, they will be automatically removed after 24 hours from upload. Your audience cannot download or keep the materials without your permission. (Note: This is not technically impossible.)",
     createButton: "Create Presentation",
+    desc_caution: "This service is in beta. It may change or be discontinued without notice.",
     register_h: "Create New Presentation",
     register_title: "Title",
     register_title_detail: "Max 32 characters",
