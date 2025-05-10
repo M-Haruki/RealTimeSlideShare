@@ -1,5 +1,6 @@
 import { PDFDocument } from "pdf-lib";
-import prisma from "~/lib/prisma";
+import prisma from "~/server/lib/prisma";
+import { randomUUID } from "crypto"; // importしなくても開発環境では動くが、production環境ではimportが必須
 
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
@@ -68,7 +69,9 @@ export default defineEventHandler(async (event) => {
     }
 
     // 16字のUUIDを生成
-    const uuid = crypto.randomUUID().replaceAll("-", "").slice(0, 16);
+    const uuid = randomUUID().replaceAll("-", "").slice(0, 16);
+    // UUIDを生成する別の方法
+    // const uuid = [...Array(16)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
 
     // PDFを分割
     const pdfs: Buffer[] = [];

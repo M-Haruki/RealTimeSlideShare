@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
-    modules: ["@nuxt/eslint", "@nuxt/icon", "@prisma/nuxt", "@nuxtjs/i18n"],
+    modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxtjs/i18n"],
     css: ["~/assets/css/main.scss"],
     vite: {
         css: {
