@@ -64,13 +64,18 @@ onMounted(() => {
                 entry => {
                     if (entry.isIntersecting) {
                         // ここが「最初から表示されている」場合も含めて発火する
-                        entry.target.classList.remove('hiden');
                         observer.unobserve(entry.target);
+                        entry.target.classList.add('startShow');
+                        entry.target.classList.remove('hiden');
+                        // 一瞬だけstartShowを適用する
+                        setTimeout(() => {
+                            entry.target.classList.remove('startShow');
+                        }, 100);
                     }
                 })
         },
         {
-            root: null,
+            root: null, // ビューポートを指定
             rootMargin: '0px',
             threshold: 1.0 // 1.0は、要素が完全に表示されている時
         }
@@ -167,8 +172,8 @@ onMounted(() => {
             padding: 25px 0;
 
             .container {
-                width: 60%;
-                max-width: 800px;
+                width: 70%;
+                max-width: 500px;
                 margin-bottom: 30px;
                 text-align: left;
 
@@ -204,6 +209,15 @@ onMounted(() => {
                 opacity: 0;
                 transition: all 0s ease-in-out; // 表示->非表示の時はtransitionを無効にする
                 transition-delay: 0s;
+            }
+
+            .container.startShow {
+                opacity: 0;
+                transition: all 0s ease-in-out; // 非表示->startShowの時はtransitionを無効にする
+                transition-delay: 0s;
+
+                // transformを、ビューポートへのイン感知後に適用する
+                // 最初から適用すると、端末のビューポートのサイズによっては外に出てしまい、そもそもビューポートへのイン感知が発火しない
 
                 &:nth-child(even) {
                     transform: translateX(50px);
