@@ -6,7 +6,10 @@ export const presentations = table("presentations", {
     title: t.text("title").notNull(),
     total_page: t.integer("total_page").notNull(),
     current_page: t.integer("current_page").notNull().default(0),
-    created_at: t.integer("created_at").notNull().default(Date.now()),
+    created_at: t
+        .integer("created_at")
+        .notNull()
+        .default(Math.round(Date.now() / 1000)),
 });
 
 export const slides = table("slides", {

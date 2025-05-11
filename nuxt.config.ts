@@ -31,4 +31,13 @@ export default defineNuxtConfig({
         langDir: "../locales/",
         lazy: true,
     },
+    nitro: {
+        // https://nitro.build/guide/tasks
+        experimental: {
+            tasks: true,
+        },
+        scheduledTasks: {
+            "0 * * * *": ["auto_delete"], // 毎時0分に実行
+        },
+    },
 });
