@@ -1,5 +1,4 @@
 import { PDFDocument } from "pdf-lib";
-import prisma from "~/server/lib/prisma";
 import { randomUUID } from "crypto"; // importしなくても開発環境では動くが、production環境ではimportが必須
 
 export default defineEventHandler(async (event) => {
@@ -89,25 +88,21 @@ export default defineEventHandler(async (event) => {
     // pdfs = pdfs.map((pdf) => Buffer.from(pdf));
 
     // DBに登録する(トランザクションを使用)
-    await prisma
-        .$transaction(async (tx) => {
-            // プレゼンテーションの登録
-            await tx.presentations.create({
-                data: {
-                    presentation_id: uuid,
-                    title: title,
-                    total_page: file_pdfDoc.getPageCount(),
-                    current_page: 0, // 初期値を設定しているが、ないとエラーになるので、ここでも設定している
-                },
+    await useDrizzle()
+        .transaction(async (tx) => {
+            await tx.insert(tables.presentations).values({
+                presentation_id: uuid,
+                title: title,
+                total_page: file_pdfDoc.getPageCount(),
+                current_page: 0, // 初期値を設定しているが、ないとエラーになるので、ここでも設定している
             });
             for (let i = 0; i < pdfs.length; i++) {
                 // スライドの登録
-                await tx.slides.create({
-                    data: {
-                        presentation_id: uuid,
-                        page: i,
-                        content: pdfs[i],
-                    },
+                await tx.insert(tables.slides).values({
+                    uuid: randomUUID(),
+                    presentation_id: uuid,
+                    page: i,
+                    content: pdfs[i],
                 });
             }
         })

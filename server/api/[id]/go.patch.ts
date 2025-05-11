@@ -1,5 +1,3 @@
-import prisma from "~/server/lib/prisma";
-
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
     const id = presentationId(event);
@@ -14,14 +12,11 @@ export default defineEventHandler(async (event) => {
         });
     }
     // presentation情報を取得
-    const presentation = await prisma.presentations.findUnique({
-        where: {
-            presentation_id: id,
-        },
-        select: {
-            total_page: true,
-        },
-    });
+    const presentations = await useDrizzle()
+        .select({ total_page: tables.presentations.total_page })
+        .from(tables.presentations)
+        .where(eq(tables.presentations.presentation_id, id));
+    const presentation = presentations[0];
     if (!presentation) {
         throw createError({
             statusCode: 404,
@@ -36,15 +31,10 @@ export default defineEventHandler(async (event) => {
         });
     }
     // 現在のページを更新
-    await prisma.presentations
-        .update({
-            where: {
-                presentation_id: id,
-            },
-            data: {
-                current_page: page,
-            },
-        })
+    await useDrizzle()
+        .update(tables.presentations)
+        .set({ current_page: page })
+        .where(eq(tables.presentations.presentation_id, id))
         .catch(() => {
             throw createError({
                 statusCode: 500,

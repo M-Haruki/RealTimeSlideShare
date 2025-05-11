@@ -1,23 +1,13 @@
-import prisma from "~/server/lib/prisma";
-
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
     const id = presentationId(event);
     // JWTの検証
     checkPermission(event, id);
     // 削除処理はトランザクションで行う
-    await prisma
-        .$transaction(async (tx) => {
-            await tx.slides.deleteMany({
-                where: {
-                    presentation_id: id,
-                },
-            });
-            await tx.presentations.delete({
-                where: {
-                    presentation_id: id,
-                },
-            });
+    await useDrizzle()
+        .transaction(async (tx) => {
+            await tx.delete(tables.slides).where(eq(tables.slides.presentation_id, id));
+            await tx.delete(tables.presentations).where(eq(tables.presentations.presentation_id, id));
         })
         .catch(() => {
             throw createError({

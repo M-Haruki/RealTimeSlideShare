@@ -1,21 +1,18 @@
-import prisma from "~/server/lib/prisma";
-
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
     const id = presentationId(event);
     // presentation情報を取得
-    const presentation = await prisma.presentations
-        .findUnique({
-            where: {
-                presentation_id: id,
-            },
-        })
+    const presentations = await useDrizzle()
+        .select()
+        .from(tables.presentations)
+        .where(eq(tables.presentations.presentation_id, id))
         .catch(() => {
             throw createError({
                 statusCode: 500,
                 statusMessage: "Internal Server Error",
             });
         });
+    const presentation = presentations[0];
     if (!presentation) {
         throw createError({
             statusCode: 404,

@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY ?? "secret"; // JWTの秘密鍵
+const SECRET_KEY = process.env.JWT_SECRET_KEY!; // JWTの秘密鍵
+if (!SECRET_KEY) {
+    throw new Error("JWT_SECRET_KEY is not defined");
+}
 
 // Function to generate a JWT
 interface generatePayload {
