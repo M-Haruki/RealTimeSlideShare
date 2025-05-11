@@ -122,6 +122,13 @@ export default defineEventHandler(async (event) => {
             decoded.permitted_ids.forEach((id) => permitted_ids.push(id));
         }
         if (!decoded) {
+            // JWTが無効な場合はCookieを消して、401エラーを返す
+            setCookie(event, "jwt", "", {
+                maxAge: -1,
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
             throw createError({
                 statusCode: 401,
                 statusMessage: "Unauthorized",
