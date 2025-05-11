@@ -6,10 +6,21 @@ RTSS
 
 JWTの仕様により、Cookieに過去のJWTが残っていると、エラーでプレゼンを作成できないことがある
 
+## Drizzle
+
+<https://orm.drizzle.team/>
+<https://www.memory-lovers.blog/entry/2024/12/25/064610>
+<https://madebyfabian.com/blog/how-to-install-drizzle-postgres-with-nuxt-3>
+<https://hub.nuxt.com/docs/recipes/drizzle>
+
 ## 本番環境
 
 ビルド後に
 node ./.output/server/index.mjs
+
+環境変数を設定
+<https://nuxt.com/docs/guide/directory-structure/env>
+`$Env:<variable-name> = "<new-value>"`
 
 ## Nuxt Minimal Starter
 
