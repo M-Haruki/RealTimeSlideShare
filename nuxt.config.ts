@@ -38,7 +38,6 @@ export default defineNuxtConfig({
         },
         scheduledTasks: {
             "0 * * * *": ["auto_delete"], // 毎時0分に実行
-            "* * * * *": ["auto_delete"], //
         },
     },
     app: {
