@@ -12,5 +12,7 @@ export default defineEventHandler(async (event) => {
         });
     }
     // JWTの検証
-    checkPermission(event, id);
+    checkPermission(event, id, () => {
+        throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+    });
 });

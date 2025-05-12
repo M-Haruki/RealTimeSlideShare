@@ -59,7 +59,7 @@ function createPresentation() {
     }).then((response) => {
         isUploading.value = false;
         alert(t("register_success_alert"));
-        navigateTo(`/${response.uuid}/control`);
+        navigateTo(`${response.uuid}/control`);
     }).catch((error) => {
         isUploading.value = false;
         if (!error.data || !error.data.data || !error.data.data.reason) {

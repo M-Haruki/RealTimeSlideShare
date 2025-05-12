@@ -5,9 +5,7 @@ export default defineTask({
     },
     async run({ payload, context }) {
         const now = Math.round(Date.now() / 1000);
-        const deleteTime = 60 * 60 * 24 * 1; // 1 days
-        const deleteTimeLimit = now - deleteTime;
-
+        const deleteTimeLimit = now - Number(process.env.DELETION_PERIOD_SECONDS);
         let delete_count = 0;
         await useDrizzle()
             .transaction(async (tx) => {

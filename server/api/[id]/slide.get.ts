@@ -1,6 +1,12 @@
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
     const id = presentationId(event);
+    if (!id) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: "Bad Request",
+        });
+    }
     // presentation情報を取得
     const presentations = await useDrizzle()
         .select({ current_page: tables.presentations.current_page, title: tables.presentations.title })
