@@ -8,12 +8,13 @@
             <span v-if="locale != 'ja'" @click="setLocale('ja')">日本語</span>
         </span>
         <span class="version">
-            {{ useRuntimeConfig().public.appVersion }}
+            {{ appVersion }}
         </span>
     </footer>
 </template>
 <script setup lang="ts">
 const { setLocale, locale } = useI18n()
+const appVersion = useRuntimeConfig().public.appVersion
 </script>
 <style scoped lang="scss">
 footer {

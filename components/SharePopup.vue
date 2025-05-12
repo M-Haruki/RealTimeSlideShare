@@ -20,10 +20,11 @@ const props = defineProps({
         required: true
     },
 });
+const runtimeConfig = useRuntimeConfig()
 const link = ref<string>("");
 const canvas = ref<HTMLCanvasElement | null>(null);
 onMounted(() => {
-    link.value = `${location.origin}${useRuntimeConfig().app.baseURL}${props.presen.id}/view`;
+    link.value = `${location.origin}${runtimeConfig.app.baseURL}${props.presen.id}/view`;
     QRCode.toCanvas(
         canvas.value,
         link.value,

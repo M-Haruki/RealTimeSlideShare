@@ -17,9 +17,6 @@ export default defineNuxtConfig({
         },
     },
     runtimeConfig: {
-        deletePeriodSeconds: "86400", // 60 * 60 * 24 * 1 = 1 days
-        DATABASE_URL: "",
-        JWT_SECRET_KEY: "",
         public: {
             appVersion: "v0.0.1",
         },
@@ -41,6 +38,7 @@ export default defineNuxtConfig({
         },
         scheduledTasks: {
             "0 * * * *": ["auto_delete"], // 毎時0分に実行
+            "* * * * *": ["auto_delete"], //
         },
     },
     app: {
