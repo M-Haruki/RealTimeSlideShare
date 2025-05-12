@@ -17,6 +17,9 @@ export default defineNuxtConfig({
         },
     },
     runtimeConfig: {
+        deletePeriodSeconds: "86400", // 60 * 60 * 24 * 1 = 1 days
+        DATABASE_URL: "",
+        JWT_SECRET_KEY: "",
         public: {
             appVersion: "v0.0.1",
         },
@@ -41,6 +44,6 @@ export default defineNuxtConfig({
         },
     },
     app: {
-        baseURL: "/rtss",
+        baseURL: "/rtss/", // 設定しない場合は`/`、設定する場合は`/rtss/`のようにスラッシュを含める
     },
 });

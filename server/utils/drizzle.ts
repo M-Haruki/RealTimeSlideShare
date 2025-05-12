@@ -6,7 +6,7 @@ export { sql, eq, and, or } from "drizzle-orm";
 export function useDrizzle() {
     return drizzle({
         connection: {
-            url: process.env.DATABASE_URL!,
+            url: useRuntimeConfig().DATABASE_URL!,
         },
     });
 }

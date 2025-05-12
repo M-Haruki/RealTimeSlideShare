@@ -1,11 +1,11 @@
 <template>
-    <div v-show="isShowShare" class="share-popup-wrapper" @click.self="isShowShare = false">
+    <div class="share-popup-wrapper" @click.self="isShowShare = false">
         <div class="share-popup">
             <p class="title">"{{ presen.title }}"</p>
             <p class="id">({{ presen.id }})</p>
             <p class="link"><a :href="link">{{ link }}</a></p>
             <div class="shareButton" @click="shareLink">{{ $t("view_share") }}</div>
-            <canvas id="qr-canvas" />
+            <canvas id="qr-canvas" ref="canvas" />
         </div>
     </div>
 </template>
@@ -21,11 +21,11 @@ const props = defineProps({
     },
 });
 const link = ref<string>("");
+const canvas = ref<HTMLCanvasElement | null>(null);
 onMounted(() => {
-    link.value = `${location.origin}/${props.presen.id}/view`;
-    const canvas = document.getElementById("qr-canvas") as HTMLCanvasElement;
+    link.value = `${location.origin}${useRuntimeConfig().app.baseURL}${props.presen.id}/view`;
     QRCode.toCanvas(
-        canvas,
+        canvas.value,
         link.value,
         {
             margin: 4,
@@ -42,8 +42,8 @@ onMounted(() => {
         }
     );
     // デフォルトでcanvasのサイズを指定しているので、styleで上書きする
-    canvas.style.setProperty("width", null);
-    canvas.style.setProperty("height", null);
+    canvas.value.style.setProperty("width", null);
+    canvas.value.style.setProperty("height", null);
 });
 // リンク共有
 function shareLink() {

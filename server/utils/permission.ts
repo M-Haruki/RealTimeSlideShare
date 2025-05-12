@@ -38,7 +38,7 @@ export function checkPermission(event: H3Event, id: string, error: () => void): 
 
 export function setPermissionCookie(permitted_ids: string[], event: H3Event): void {
     // JWTを生成し、Cookieに保存
-    const expiresIn = Number(process.env.DELETION_PERIOD_SECONDS);
+    const expiresIn = Number(useRuntimeConfig().deletePeriodSeconds);
     const token = generateJwtToken({ permitted_ids: permitted_ids }, expiresIn);
     setCookie(event, "jwt", token, {
         maxAge: expiresIn,
