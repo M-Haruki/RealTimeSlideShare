@@ -9,7 +9,7 @@
         </div>
         <div class="bottom">
             <div class="buttonArea">
-                <div id="registerButton" @click="navigateTo('/register')">
+                <div id="registerButton" @click="navigateTo('register')">
                     <p>{{ $t("createButton") }}</p>
                 </div>
                 <p class="caution">{{ $t("desc_caution") }}</p>

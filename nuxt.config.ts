@@ -40,4 +40,7 @@ export default defineNuxtConfig({
             "0 * * * *": ["auto_delete"], // 毎時0分に実行
         },
     },
+    app: {
+        baseURL: "/rtss/", // 設定しない場合は`/`、設定する場合は`/rtss/`のようにスラッシュを含める
+    },
 });

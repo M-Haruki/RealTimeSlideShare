@@ -95,8 +95,7 @@ export class Presentation {
     }
 }
 
-export function pdfviewerStyling(): void {
-    const pdfviewer = document.getElementById("pdfviewer") as HTMLIFrameElement;
+export function pdfviewerStyling(pdfviewer: HTMLIFrameElement): void {
     const iframeWindow = pdfviewer.contentWindow;
     if (iframeWindow) {
         const toolbar = iframeWindow.document.getElementsByClassName("toolbar")[0] as HTMLDivElement;

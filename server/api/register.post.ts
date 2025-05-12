@@ -49,8 +49,7 @@ export default defineEventHandler(async (event) => {
     // pdfの読み込み
     const file_pdfDoc = await PDFDocument.load(file_buffer, {
         ignoreEncryption: true,
-    }).catch((err) => {
-        console.log(err);
+    }).catch(() => {
         throw createError({
             statusCode: 400,
             statusMessage: "Bad Request",
@@ -113,39 +112,11 @@ export default defineEventHandler(async (event) => {
             });
         });
 
-    const permitted_ids = new Array<string>();
-    const cookies = parseCookies(event);
+    const permitted_ids = getPermittedIds(event);
     // すでに権限が付与されている場合は、そこに追加する
-    if (cookies.jwt) {
-        const decoded = verifyJwtToken(cookies.jwt);
-        if (decoded?.permitted_ids) {
-            decoded.permitted_ids.forEach((id) => permitted_ids.push(id));
-        }
-        if (!decoded) {
-            // JWTが無効な場合はCookieを消して、401エラーを返す
-            setCookie(event, "jwt", "", {
-                maxAge: -1,
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
-            });
-            throw createError({
-                statusCode: 401,
-                statusMessage: "Unauthorized",
-            });
-        }
-    }
-    // 配列にUUIDを追加
     permitted_ids.push(uuid);
-    // 権限付与
-    const expiresIn = 60 * 60 * 24 * 7; // 1 week
-    const token = generateJwtToken({ permitted_ids: permitted_ids }, expiresIn);
-    setCookie(event, "jwt", token, {
-        maxAge: expiresIn,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-    });
+    setPermissionCookie(permitted_ids, event);
+
     // return
     return {
         message: "OK",

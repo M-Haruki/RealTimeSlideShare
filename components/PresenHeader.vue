@@ -18,7 +18,7 @@
             </div>
         </div>
     </header>
-    <SharePopup :presen="presen" />
+    <SharePopup v-if="isShowShare" :presen="presen" />
 </template>
 
 <script setup lang="ts">

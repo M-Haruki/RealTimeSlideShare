@@ -1,8 +1,16 @@
 export default defineEventHandler(async (event) => {
     // パラメーターの取得
     const id = presentationId(event);
+    if (!id) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: "Bad Request",
+        });
+    }
     // JWTの検証
-    checkPermission(event, id);
+    checkPermission(event, id, () => {
+        throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+    });
     // 他のパラメーターの取得
     const page = Number(getQuery(event)["page"]);
     if (isNaN(page) || page < 0) {
