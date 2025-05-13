@@ -11,8 +11,10 @@ export class Presentation {
     current_page = ref<number | null>(null);
     title = ref<string | null>(null);
     timeId: Timeout | null = null;
-    constructor(id: string, isRealtime: boolean = true) {
+    $i18n: any;
+    constructor(id: string, $i18n: any, isRealtime: boolean = true) {
         this.id = id;
+        this.$i18n = $i18n;
         this.path = `${useRuntimeConfig().app.baseURL}api/${this.id}/slide`;
         // isGo変数を同期させる
         watch(
@@ -30,20 +32,18 @@ export class Presentation {
         this.getInfo(isRealtime);
     }
     delete(success: () => void) {
-        const { $i18n } = useNuxtApp();
         $fetch(`/api/${this.id}/delete`, { method: "delete" })
             .then(() => {
                 if (this.timeId) clearTimeout(this.timeId);
                 success();
             })
             .catch(() => {
-                alert($i18n.t("error_alert"));
+                alert(this.$i18n.t("error_alert"));
             });
     }
     go(page: number) {
-        const { $i18n } = useNuxtApp();
         if (page < 0 || this.total_page.value === null || page >= this.total_page.value) {
-            alert($i18n.t("slide_error_alert_page"));
+            alert(this.$i18n.t("slide_error_alert_page"));
             return;
         }
         $fetch(`/api/${this.id}/go?page=${page}`, { method: "patch" })
@@ -51,7 +51,7 @@ export class Presentation {
                 this.current_page.value = res.current_page;
             })
             .catch(() => {
-                alert($i18n.t("error_alert"));
+                alert(this.$i18n.t("error_alert"));
             });
     }
     checkIsGo() {
@@ -70,7 +70,6 @@ export class Presentation {
     }
     getInfo(re: boolean = false) {
         // re: 再起呼び出しフラグ
-        const { $i18n } = useNuxtApp();
         $fetch(`/api/${this.id}/info`, { method: "get" })
             .then((response) => {
                 this.title.value = response.title;
@@ -86,10 +85,10 @@ export class Presentation {
             })
             .catch((e) => {
                 if (e.status === 404) {
-                    alert($i18n.t("slide_error_alert_not_found"));
+                    alert(this.$i18n.t("slide_error_alert_not_found"));
                     navigateTo("/");
                 } else {
-                    alert($i18n.t("slide_error_alert_failed"));
+                    alert(this.$i18n.t("slide_error_alert_failed"));
                 }
             });
     }
