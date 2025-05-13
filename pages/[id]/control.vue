@@ -1,9 +1,10 @@
+
 <template>
     <div>
         <PresenHeader :presen="presen" mode="control" />
         <div class="content">
             <iframe id="pdfviewer" :key="(presen.current_page.value ?? -1)" ref="pdfviewer"
-                :onload="() => pdfviewerStyling(pdfviewer)" :src="`/pdfjs/web/viewer.html?file=${presen.path}`"
+                :onload="() => pdfviewerStyling(pdfviewer)" :src="`${runtimeConfig.app.baseURL}pdfjs/web/viewer.html?file=${presen.path}`"
                 frameborder="0" />
             <div class="page-controller">
                 <div class="button prev" :class="presen.isGo.value.prev ? '' : 'disabled'"
@@ -28,6 +29,7 @@
 const presen = new Presentation(useRoute().params.id as string)
 const current_page_vmodel = ref(0)
 const pdfviewer = ref<HTMLIFrameElement | null>(null)
+const runtimeConfig = useRuntimeConfig()
 // presen.current_pageとの同期
 watch(presen.current_page, (val) => {
     current_page_vmodel.value = (val ?? 0) + 1
