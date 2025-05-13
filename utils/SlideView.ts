@@ -13,7 +13,7 @@ export class Presentation {
     timeId: Timeout | null = null;
     constructor(id: string, isRealtime: boolean = true) {
         this.id = id;
-        this.path = `/api/${this.id}/slide`;
+        this.path = `${useRuntimeConfig().app.baseURL}api/${this.id}/slide`;
         // isGo変数を同期させる
         watch(
             [this.current_page, this.total_page],
