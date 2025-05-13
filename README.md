@@ -2,10 +2,6 @@
 
 RTSS
 
-## メモ
-
-JWTの仕様により、Cookieに過去のJWTが残っていると、エラーでプレゼンを作成できないことがある
-
 ## Drizzle
 
 <https://orm.drizzle.team/>
