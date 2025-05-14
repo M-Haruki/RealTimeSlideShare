@@ -23,8 +23,8 @@ let presentations: any;
 switch (process.env.DATABASE_TYPE) {
     case "mysql":
         presentations = table_mysql("presentations", {
-            presentation_id: t_mysql.text("presentation_id").primaryKey(),
-            title: t_mysql.text("title").notNull(),
+            presentation_id: t_mysql.varchar("presentation_id", { length: 16 }).primaryKey(),
+            title: t_mysql.varchar("title", { length: 32 }).notNull(),
             total_page: t_mysql.int("total_page").notNull(),
             current_page: t_mysql.int("current_page").notNull().default(0),
             created_at: t_mysql
@@ -55,10 +55,10 @@ switch (process.env.DATABASE_TYPE) {
     case "mysql":
         slides = table_mysql("slides", {
             uuid: t_mysql
-                .text("uuid")
+                .varchar("uuid", { length: 36 })
                 .primaryKey()
                 .$defaultFn(() => randomUUID()),
-            presentation_id: t_mysql.text("presentation_id").notNull(),
+            presentation_id: t_mysql.varchar("presentation_id", { length: 16 }).notNull(),
             page: t_mysql.int("page").notNull(),
             content: t_mysql.binary("content").notNull(),
         });
@@ -85,16 +85,16 @@ switch (process.env.DATABASE_TYPE) {
     case "mysql":
         log = table_mysql("log", {
             uuid: t_mysql
-                .text("uuid")
+                .varchar("uuid", { length: 36 })
                 .primaryKey()
                 .$defaultFn(() => randomUUID()),
-            ip: t_mysql.text("ip").notNull(),
-            action: t_mysql.text("action").notNull(),
+            ip: t_mysql.varchar("ip", { length: 64 }).notNull(),
+            action: t_mysql.varchar("action", { length: 32 }).notNull(),
             timestamp: t_mysql
                 .int("timestamp")
                 .notNull()
                 .$defaultFn(() => Math.round(Date.now() / 1000)),
-            presentation_id: t_mysql.text("presentation_id"),
+            presentation_id: t_mysql.varchar("presentation_id", { length: 16 }),
         });
         break;
     case "sqlite":
