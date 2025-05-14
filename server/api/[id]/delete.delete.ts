@@ -16,6 +16,11 @@ export default defineEventHandler(async (event) => {
         .transaction(async (tx) => {
             await tx.delete(tables.slides).where(eq(tables.slides.presentation_id, id));
             await tx.delete(tables.presentations).where(eq(tables.presentations.presentation_id, id));
+            await tx.insert(tables.log).values({
+                ip: ipaddress(event),
+                action: "delete",
+                presentation_id: id,
+            });
         })
         .catch(() => {
             throw createError({

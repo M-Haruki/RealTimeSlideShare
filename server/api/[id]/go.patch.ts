@@ -39,16 +39,23 @@ export default defineEventHandler(async (event) => {
         });
     }
     // 現在のページを更新
-    await useDrizzle()
-        .update(tables.presentations)
-        .set({ current_page: page })
-        .where(eq(tables.presentations.presentation_id, id))
-        .catch(() => {
-            throw createError({
-                statusCode: 500,
-                statusMessage: "Internal Server Error",
+    await useDrizzle().transaction(async (tx) => {
+        await tx
+            .update(tables.presentations)
+            .set({ current_page: page })
+            .where(eq(tables.presentations.presentation_id, id))
+            .catch(() => {
+                throw createError({
+                    statusCode: 500,
+                    statusMessage: "Internal Server Error",
+                });
             });
+        await tx.insert(tables.log).values({
+            ip: ipaddress(event),
+            action: "go",
+            presentation_id: id,
         });
+    });
     // return
     return {
         current_page: page,

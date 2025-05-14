@@ -4,6 +4,8 @@ import * as t_sqlite from "drizzle-orm/sqlite-core";
 import { mysqlTable as table_mysql } from "drizzle-orm/mysql-core";
 import * as t_mysql from "drizzle-orm/mysql-core";
 
+import { randomUUID } from "crypto"; // importしなくても開発環境では動くが、production環境ではimportが必須
+
 let tables: any;
 switch (process.env.DATABASE_TYPE) {
     case "mysql":
@@ -52,7 +54,10 @@ let slides: any;
 switch (process.env.DATABASE_TYPE) {
     case "mysql":
         slides = table_mysql("slides", {
-            uuid: t_mysql.text("uuid").primaryKey(),
+            uuid: t_mysql
+                .text("uuid")
+                .primaryKey()
+                .$defaultFn(() => randomUUID()),
             presentation_id: t_mysql.text("presentation_id").notNull(),
             page: t_mysql.int("page").notNull(),
             content: t_mysql.binary("content").notNull(),
@@ -60,7 +65,10 @@ switch (process.env.DATABASE_TYPE) {
         break;
     case "sqlite":
         slides = table_sqlite("slides", {
-            uuid: t_sqlite.text("uuid").primaryKey(),
+            uuid: t_sqlite
+                .text("uuid")
+                .primaryKey()
+                .$defaultFn(() => randomUUID()),
             presentation_id: t_sqlite.text("presentation_id").notNull(),
             page: t_sqlite.integer("page").notNull(),
             content: t_sqlite.blob("content").notNull(),
@@ -71,3 +79,41 @@ switch (process.env.DATABASE_TYPE) {
 }
 
 export { slides };
+
+let log: any;
+switch (process.env.DATABASE_TYPE) {
+    case "mysql":
+        log = table_mysql("log", {
+            uuid: t_mysql
+                .text("uuid")
+                .primaryKey()
+                .$defaultFn(() => randomUUID()),
+            ip: t_mysql.text("ip").notNull(),
+            action: t_mysql.text("action").notNull(),
+            timestamp: t_mysql
+                .int("timestamp")
+                .notNull()
+                .default(Math.round(Date.now() / 1000)),
+            presentation_id: t_mysql.text("presentation_id"),
+        });
+        break;
+    case "sqlite":
+        log = table_sqlite("log", {
+            uuid: t_sqlite
+                .text("uuid")
+                .primaryKey()
+                .$defaultFn(() => randomUUID()),
+            ip: t_sqlite.text("ip").notNull(),
+            action: t_sqlite.text("action").notNull(),
+            timestamp: t_sqlite
+                .integer("timestamp")
+                .notNull()
+                .default(Math.round(Date.now() / 1000)),
+            presentation_id: t_sqlite.text("presentation_id"),
+        });
+        break;
+    default:
+        throw new Error("Invalid database type");
+}
+
+export { log };
