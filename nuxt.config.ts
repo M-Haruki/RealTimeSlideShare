@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            appVersion: "v0.0.1",
+            appVersion: "v0.0.2",
         },
     },
     i18n: {

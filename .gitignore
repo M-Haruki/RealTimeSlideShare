@@ -25,3 +25,7 @@ logs
 
 # for server
 nohup.out
+
+# db
+*.db
+migrations/

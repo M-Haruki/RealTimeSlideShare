@@ -11,12 +11,21 @@ RTSS
 
 ## 本番環境
 
-ビルド後に
-node ./.output/server/index.mjs
+```shell
+# パッケージのインストール
+npm install
+npm install -g forever
 
-環境変数を設定
-<https://nuxt.com/docs/guide/directory-structure/env>
-`$Env:<variable-name> = "<new-value>"`
+# ビルド
+npm build
+
+## DBのマイグレーション
+npm run db:generate
+npm run db:migrate
+
+# サーバーをスタート
+forever start -c "node --env-file=.env" .output/server/index.mjs
+```
 
 ## Nuxt Minimal Starter
 

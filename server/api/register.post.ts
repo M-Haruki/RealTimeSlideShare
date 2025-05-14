@@ -98,12 +98,16 @@ export default defineEventHandler(async (event) => {
             for (let i = 0; i < pdfs.length; i++) {
                 // スライドの登録
                 await tx.insert(tables.slides).values({
-                    uuid: randomUUID(),
                     presentation_id: uuid,
                     page: i,
                     content: pdfs[i],
                 });
             }
+            await tx.insert(tables.log).values({
+                ip: ipaddress(event),
+                action: "create",
+                presentation_id: uuid,
+            });
         })
         .catch(() => {
             throw createError({
