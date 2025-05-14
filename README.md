@@ -19,12 +19,15 @@ npm install -g forever
 # ビルド
 npm build
 
-## DBのマイグレーション
+# DBのマイグレーション
 npm run db:generate
 npm run db:migrate
 
 # サーバーをスタート
 forever start -c "node --env-file=.env" .output/server/index.mjs
+
+# cronに設定(起動時に実行できるように)
+@reboot forever start -c "node --env-file=.env" .output/server/index.mjs
 ```
 
 ## Nuxt Minimal Starter
