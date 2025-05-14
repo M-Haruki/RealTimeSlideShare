@@ -30,7 +30,7 @@ switch (process.env.DATABASE_TYPE) {
             created_at: t_mysql
                 .int("created_at")
                 .notNull()
-                .default(Math.round(Date.now() / 1000)),
+                .$defaultFn(() => Math.round(Date.now() / 1000)),
         });
         break;
     case "sqlite":
@@ -42,7 +42,7 @@ switch (process.env.DATABASE_TYPE) {
             created_at: t_sqlite
                 .integer("created_at")
                 .notNull()
-                .default(Math.round(Date.now() / 1000)),
+                .$defaultFn(() => Math.round(Date.now() / 1000)),
         });
         break;
     default:
@@ -93,7 +93,7 @@ switch (process.env.DATABASE_TYPE) {
             timestamp: t_mysql
                 .int("timestamp")
                 .notNull()
-                .default(Math.round(Date.now() / 1000)),
+                .$defaultFn(() => Math.round(Date.now() / 1000)),
             presentation_id: t_mysql.text("presentation_id"),
         });
         break;
@@ -108,7 +108,7 @@ switch (process.env.DATABASE_TYPE) {
             timestamp: t_sqlite
                 .integer("timestamp")
                 .notNull()
-                .default(Math.round(Date.now() / 1000)),
+                .$defaultFn(() => Math.round(Date.now() / 1000)),
             presentation_id: t_sqlite.text("presentation_id"),
         });
         break;
