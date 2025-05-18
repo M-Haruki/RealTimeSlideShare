@@ -1,10 +1,16 @@
 import { sqliteTable as table_sqlite } from "drizzle-orm/sqlite-core";
 import * as t_sqlite from "drizzle-orm/sqlite-core";
 
-import { mysqlTable as table_mysql } from "drizzle-orm/mysql-core";
+import { mysqlTable as table_mysql, customType } from "drizzle-orm/mysql-core";
 import * as t_mysql from "drizzle-orm/mysql-core";
 
 import { randomUUID } from "crypto"; // importしなくても開発環境では動くが、production環境ではimportが必須
+
+const mediumBlob = customType<{ data: Buffer }>({
+    dataType: () => "mediumblob",
+    toDriver: (value: Buffer) => value,
+    fromDriver: (value: unknown) => Buffer.from(value as ArrayBuffer),
+});
 
 let tables: any;
 switch (process.env.DATABASE_TYPE) {
@@ -60,7 +66,7 @@ switch (process.env.DATABASE_TYPE) {
                 .$defaultFn(() => randomUUID()),
             presentation_id: t_mysql.varchar("presentation_id", { length: 16 }).notNull(),
             page: t_mysql.int("page").notNull(),
-            content: t_mysql.binary("content").notNull(),
+            content: mediumBlob("content").notNull(),
         });
         break;
     case "sqlite":
