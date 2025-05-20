@@ -27,7 +27,7 @@ npm run db:migrate
 forever start -c "node --env-file=.env" .output/server/index.mjs
 
 # cronに設定(起動時に実行できるように)
-@reboot forever start -c "node --env-file=.env" .output/server/index.mjs
+@reboot forever start -c "node --env-file=.env" /var/www/lab.m-haru.net/node/rtss/.output/server/index.mjs
 ```
 
 ## Nuxt Minimal Starter
